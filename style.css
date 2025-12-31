@@ -1,0 +1,122 @@
+@font-face {
+    font-family: 'GMarketSans';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+    font-weight: 300;
+    font-display: swap;
+}
+
+html, body{
+    margin: 0 auto;
+    height: 100vw;
+}
+
+html{
+    background-color: #28293e;
+}
+
+body{
+    width: 70vw;
+    font-family: 'GMarketSans';
+    box-shadow: 0 0 15px 20px rgba(17, 17, 32, 0.55);
+}
+
+a{
+    text-decoration-line: none;
+}
+
+/* header 설정 */
+
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.header a{
+    color: white;
+    font-size: 3vw;
+    margin: 1.5vw 0;
+}
+
+/* 본문 설정 */
+
+.wrap{
+    height: auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    /* margin: 1vw 0; */
+    padding: 5vw 2vw;
+    gap: 0 2vw;
+}
+
+.profile-area-text{
+    display: flex;
+    flex-direction: column;
+    align-self: end;
+    flex-grow: 2;
+}
+
+.profile-area-img{
+    width: 330px;
+    height: 350px;
+    border-radius: 0% 0% 100% 100%;
+    overflow: hidden;
+    align-self: start;
+    flex-grow: 2;
+}
+
+.profile-area-img img{
+    width: 85vw;
+    height: auto;
+    overflow: cover;
+    transform: translate(-15vw, -18vw);
+}
+
+.profile-area-skill{
+    align-self: flex-end;
+    flex-grow: 4;
+}
+
+/* 색상 모음 */
+.orange{
+    color: #ef6d58;
+}
+
+.navy{
+    color: #28293e;
+}
+
+.white{
+    color: white;
+}
+
+.bg-orange{
+    background-color: #ef6d58;
+}
+
+.bg-navy{
+    background-color: #28293e;
+}
+
+.bg-white{
+    background-color: white;
+}
+
+/* 폰트사이즈 모음 */
+.font-big{
+    font-size: 15vw;
+    font-weight: bolder;
+    line-height: 90%;
+}
+
+.font-mid{
+    font-size: 7vw;
+    font-weight: bold;
+    line-height: 100%;
+}
+
+.font-sml{
+    font-size: 3vw;
+    font-weight: lighter;
+}
