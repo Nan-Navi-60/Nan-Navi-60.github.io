@@ -139,9 +139,11 @@ a:visited, a:hover, a:active {
     font-size: 1vw;
     font-weight: bolder;
 
-    padding: 0.5vw 1vw;
+    padding: 1vw 1vw 0.8vw 1vw;
     margin: 0.5vw 0;
     text-align: center;
+
+    line-height: 0.7;
 
     border: 0.3vw solid white;
     border-radius: 50vw;

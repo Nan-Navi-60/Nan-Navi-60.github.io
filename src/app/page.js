@@ -1,6 +1,7 @@
 import ProfileSection from '../components/ProfileSection';
 import SkillSection from '../components/SkillSection';
 import ProjectSection from '../components/ProjectSection';
+import { skills } from '../data/skillList';
 
 export default function Home() {
   return (
@@ -9,7 +10,7 @@ export default function Home() {
       <ProfileSection />
       
       {/* 2. 스킬 영역 */}
-      <SkillSection />
+      <SkillSection skills={skills} />
       
       {/* 3. 프로젝트 영역 */}
       <ProjectSection />

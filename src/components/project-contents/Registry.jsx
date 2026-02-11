@@ -12,12 +12,10 @@ const contents = {
 };
 
 export default function ProjectContent({ id }) {
+  // 전달 받은 id에 매칭되는 파일을 contents에 저장
   const SelectedContent = contents[id];
-  const isContentNull = contents[id] === null;
 
-  // 아직 내용이 없는 경우
-  if (isContentNull) return <div className="padding-2vw">아직 작성 중인 Project입니다!</div>
-  // 해당하는 내용이 없으면 에러 메시지 혹은 빈 화면
+  // 매칭되는 id가 존재하지 않음
   if (!SelectedContent) return <div className="padding-2vw">해당 Project를 찾을 수 없습니다.</div>;
 
   return <SelectedContent />;
