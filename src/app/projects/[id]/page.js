@@ -1,5 +1,3 @@
-'use client'; // useParams 사용을 위해 클라이언트 컴포넌트 선언
-
 import { useParams } from 'next/navigation';
 import { projectList } from '../../../data/projectList';
 import ProjectContent from '../../../components/project-contents/Registry';
