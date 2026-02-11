@@ -1,29 +1,33 @@
-import { useParams } from 'next/navigation';
 import { projectList } from '../../../data/projectList';
 import ProjectContent from '../../../components/project-contents/Registry';
 import Link from 'next/link';
-import '../../../app/globals.css'; // CSS 적용
 
-export function generateStaticParams() {
+// 1. [필수] 정적 배포를 위해 빌드 시 페이지 ID 목록을 미리 생성
+export async function generateStaticParams() {
   return projectList.map((project) => ({
     id: project.id.toString(),
   }));
 }
 
-export default function ProjectDetail() {
-  const params = useParams();
+// 2. [서버 컴포넌트] 페이지 본문
+// params는 비동기(Promise) 데이터이므로 async/await로 처리해야 합니다.
+export default async function ProjectDetail({ params }) {
+  
+  // Next.js 15+ 문법 대응: params를 await로 풀어서 사용
+  const resolvedParams = await params;
+  const id = Number(resolvedParams.id);
 
-  // 빌드 과정에서 params가 없을 수도 있는 상황을 대비 (Optional Chaining)
-  const id = params?.id ? Number(params.id) : null;
-
-  // 1. 메타 데이터 찾기
+  // 데이터 찾기
   const metaData = projectList.find((p) => p.id === id);
 
-  if (!metaData) return <div>존재하지 않는 프로젝트입니다.</div>;
+  // 예외 처리 (데이터가 없을 때)
+  if (!metaData) {
+    return <div className="padding-2vw">존재하지 않는 프로젝트입니다.</div>;
+  }
 
   return (
     <div className="wrap">
-      {/* 상단 헤더 영역 (공통 디자인) */}
+      {/* 상단 헤더 영역 */}
       <div className="detail-header">
         <h1 className="font-mid">{metaData.title}</h1>
         <p className="font-sml">{metaData.desc}</p>
@@ -41,7 +45,7 @@ export default function ProjectDetail() {
 
       <hr className="divider" />
 
-      {/* 본문 영역 (개별 파일 로딩) */}
+      {/* 본문 영역 (레지스트리에서 내용 가져오기) */}
       <div className="detail-content-area">
         <ProjectContent id={id} />
       </div>
