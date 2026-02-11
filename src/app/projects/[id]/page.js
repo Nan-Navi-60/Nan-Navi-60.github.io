@@ -6,9 +6,17 @@ import ProjectContent from '../../../components/project-contents/Registry';
 import Link from 'next/link';
 import '../../../app/globals.css'; // CSS 적용
 
+export function generateStaticParams() {
+  return projectList.map((project) => ({
+    id: project.id.toString(),
+  }));
+}
+
 export default function ProjectDetail() {
   const params = useParams();
-  const id = Number(params.id); // URL의 id 가져오기 (문자열 -> 숫자)
+
+  // 빌드 과정에서 params가 없을 수도 있는 상황을 대비 (Optional Chaining)
+  const id = params?.id ? Number(params.id) : null;
 
   // 1. 메타 데이터 찾기
   const metaData = projectList.find((p) => p.id === id);
