@@ -1,0 +1,359 @@
+@font-face {
+    font-family: 'GMarketSans';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+    font-weight: 300;
+    font-display: swap;
+}
+
+/* 기본 초기화 */
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    /* html은 전체 배경(네이비)을 담당 */
+    background-color: #28293e; 
+}
+
+body {
+    /* 핵심 1: 높이를 고정(100%)하지 말고, 최소 높이를 화면 전체(100vh)로 잡습니다 */
+    /* 내용이 적으면 화면 꽉 차게, 내용이 많으면 알아서 늘어납니다 */
+    min-height: 100vh;
+    height: auto; 
+
+    /* 핵심 2: 레이아웃 중앙 정렬 및 너비 설정 */
+    width: 70vw;
+    margin: 0 auto;
+
+    /* 핵심 3: 디자인 요소 */
+    background-color: white; /* 본문 배경(흰색) */
+    font-family: 'GMarketSans', sans-serif;
+    box-shadow: 0 0 6vw 5vw rgba(17, 17, 32, 0.55);
+
+    /* 하단 여백: 맨 아래 내용이 바닥에 딱 붙지 않게 */
+    padding-bottom: 50px; 
+    
+    /* 스크롤 관련 버그 방지 */
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    overflow-y: auto;   /* 세로 스크롤 허용 (기본값이지만 명시) */
+}
+
+a{
+    text-decoration-line: none;
+}
+
+a:visited, a:hover, a:active {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* header 설정 */
+
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3vw;
+}
+
+.header a{
+    font-size: 1vw;
+    color: white;
+    text-align: center;
+    display: block;
+    padding: 1vw;
+}
+
+.header a:hover{
+    /* box-shadow: inset 0 0 0.7vw 0.1vw rgba(104, 97, 165, 0.7); */
+    box-shadow: inset 0 0 0.3vw 0.1vw rgba(255, 255, 255, 0.4);
+    /* inset -1vw 0 1vw 0.5vw rgba(255, 255, 255, 0.243); */
+}
+
+/* 본문 설정 */
+
+/* 개인 설명 영역 */
+.wrap {
+    /* height: auto; 삭제 됨 */
+    display: flex;
+    justify-content: center;
+    
+    /* ⚠️ 문제의 원인 삭제! */
+    /* flex-wrap: wrap; <--- 이 줄을 지워야 합니다. 세로 배치에선 독입니다. */
+    flex-wrap: nowrap; /* 명시적으로 줄바꿈 금지를 해도 좋습니다 */
+    
+    flex-direction: column; /* 세로로 쌓이도록 설정 */
+    
+    padding: 5vw 2vw;
+    gap: 1vw;
+}
+
+.profile-area-personal{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 0 2vw;
+    flex-direction: row;
+    margin-bottom: 1vw;
+    /* margin: 0 auto; */
+}
+
+.profile-area-text{
+    display: flex;
+    flex-direction: column;
+    align-self: end;
+    /* flex-grow: 2; */
+}
+
+.profile-area-img{
+    width: 24vw;
+    height: 24vw;
+    border-radius: 0% 0% 100% 100%;
+    overflow: hidden;
+    align-self: start;
+    justify-self: end;
+    /* flex-grow: 2; */
+}
+
+.profile-area-img img{
+    width: 100%;
+    height: auto;
+    overflow: cover;
+    transform: translate(0vw, -8vw);
+}
+
+.profile-area-skill{
+    align-self: start;
+    flex-grow: 4;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1vw;
+    padding: 1.5vw;
+    margin: auto;
+    justify-content: center;
+    border-radius: 2vw;
+}
+
+.font-icon{
+    font-size: 1vw;
+    font-weight: bolder;
+
+    padding: 0.5vw 1vw;
+    margin: 0.5vw 0;
+    text-align: center;
+
+    border: 0.3vw solid white;
+    border-radius: 50vw;
+    min-width: 3.5vw;
+    height: auto;
+
+    box-shadow: 0.2vw 0.1vw 0.8vw 0.1vw rgba(255, 255, 255, 0.3);
+}
+
+.font-icon:hover{
+    box-shadow: 0.5vw 0.3vw 1vw 0.1vw rgba(17, 17, 32, 0.55);
+    transform: translate(-0.5vw, -0.2vw);
+}
+
+/* Project 영역 */
+.project-area {
+    display: flex;           /* Grid 대신 Flex 사용 */
+    flex-direction: column;  /* 위에서 아래로 쌓이게 설정 */
+    gap: 5vw;                /* 프로젝트 간의 간격 */
+    padding: 5vw 2vw;
+}
+
+.project-area-list {
+    display: flex;           /* 내부 요소를 가로로 배치 */
+    flex-direction: row;     /* [이미지] - [설명] 가로 배치 */
+    align-items: center;     /* 세로 중앙 정렬 */
+    gap: 3vw;                /* 이미지와 설명 사이 간격 */
+    width: 100%;
+
+    /* 구분선 (선택사항) */
+    padding-bottom: 5vw;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 이미지에 마우스 올리면 이미지 살짝 확대되는 효과 및 그림자*/
+.project-area-list:hover {
+    img {transform: scale(1.05);}
+}
+
+/* 마지막 프로젝트의 구분선과 여백 제거 */
+.project-area-list:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.project-area-img {
+    width: 55%;             /* 이미지가 영역의 55% 차지 */
+    /* 사이트 스크린샷은 보통 가로가 기므로 16:9 비율 추천 */
+    aspect-ratio: 16 / 9;    
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0.5vw solid white;
+    overflow: hidden;
+    border-radius: 1vw;      /* 살짝 둥글게 처리 (선택) */
+    flex-shrink: 0;          /* 이미지 크기가 찌그러지지 않게 고정 */
+}
+
+.project-area-img img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    /* align-content: center;
+    justify-self: center;
+    align-self: center; */
+    transition: transform 0.3s ease; /* 마우스 올렸을 때 효과 */
+}
+
+/* 이미지에 마우스 올리면 살짝 확대되는 효과 */
+/* .project-area-img:hover img {
+    transform: scale(1.05);
+} */
+
+/* 설명 텍스트 영역 (새로 추가됨) */
+.project-area-text-group {
+    display: flex;
+    flex-direction: column;
+    width: 45%;              /* 텍스트가 나머지 45% 차지 */
+    gap: 1vw;                /* 제목과 설명 사이 간격 */
+}
+
+.project-area > a {
+    display: block;  /* a태그를 박스처럼 만듦 (중요: 레이아웃 깨짐 방지) */
+    width: 100%;     /* 가로 꽉 차게 */
+    color: white !important; /* !important로 파란색 덮어쓰기 (핵심) */
+    text-decoration: none !important; /* 밑줄 제거 */
+}
+
+/* 2. 링크에 마우스 올렸을 때도 흰색 유지 & 내부 이미지 확대 효과 전달 */
+.project-area > a:hover {
+    color: white !important;
+}
+
+/* ProjectDetail 영역 */
+/* 상세 페이지 스타일 */
+.detail-header {
+    width: 100%;
+    padding: 2vw 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+}
+
+.detail-meta-info {
+    display: flex;
+    gap: 2vw;
+    color: #666;
+    font-size: 1.2vw;
+}
+
+.detail-links {
+    display: flex;
+    gap: 1vw;
+    margin-top: 1vw;
+}
+
+.btn-link {
+    padding: 0.5vw 1.5vw;
+    background-color: #28293e;
+    color: white;
+    border-radius: 0.5vw;
+    font-size: 1vw;
+    font-weight: bold;
+}
+
+.divider {
+    width: 100%;
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 2vw 0;
+}
+
+/* 본문 스타일 */
+.detail-title {
+    font-size: 2vw;
+    margin-top: 4vw;
+    margin-bottom: 1.5vw;
+    color: #28293e;
+    border-left: 0.5vw solid #ef6d58; /* 포인트 컬러 */
+    padding-left: 1vw;
+}
+
+.detail-text {
+    font-size: 1.2vw;
+    line-height: 1.6;
+    color: #333;
+}
+
+.trouble-box {
+    background-color: #f5f5f5;
+    padding: 2vw;
+    border-radius: 1vw;
+    margin-top: 1vw;
+}
+
+/* 색상 모음 */
+.orange{
+    color: #ef6d58;
+}
+
+.navy{
+    color: #28293e;
+}
+
+.white{
+    color: white;
+}
+
+.green{
+    color: #70B540;
+}
+
+.yellow{
+    color: #F7DF1E;
+}
+
+.bg-orange{
+    background-color: #ef6d58;
+}
+
+.bg-navy{
+    background-color: #28293e;
+}
+
+.bg-white{
+    background-color: white;
+}
+
+.bg-green{
+    background-color: #70B540;
+}
+
+.bg-yellow{
+    background-color: #F7DF1E;
+}
+
+/* 폰트사이즈 모음 */
+.font-big{
+    font-size: 8vw;
+    font-weight: bolder;
+    line-height: 90%;
+}
+
+.font-mid{
+    font-size: 3vw;
+    font-weight: bold;
+    line-height: 100%;
+}
+
+.font-sml{
+    font-size: 1.3vw;
+    font-weight: lighter;
+}
