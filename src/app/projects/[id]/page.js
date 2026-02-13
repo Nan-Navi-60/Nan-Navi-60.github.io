@@ -1,5 +1,5 @@
-import { projectList } from '../../../data/projectList';
-import ProjectContent from '../../../components/project-contents/Registry';
+import { projectList } from '@/data/projectList';
+import ProjectContent from '@/components/project-contents/Registry';
 import Link from 'next/link';
 import SkillSection from '@/components/SkillSection';
 
