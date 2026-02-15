@@ -1,1 +1,3 @@
-export default <a>JicBak</a>;
+export default function detail(){
+return (<a>JicBak</a>);
+}
