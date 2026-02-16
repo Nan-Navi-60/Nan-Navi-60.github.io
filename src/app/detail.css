@@ -1,0 +1,68 @@
+@import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
+
+/* 본문 스타일 */
+.project-detail-container {
+    margin: 0 10%;
+    font-family: 'nanumsquare';
+}
+
+.detail-title {
+    margin-top: 4vw;
+    margin-bottom: 2.5vw;
+    color: #28293e;
+    border-left: 0.5vw solid #ef6d58; /* 포인트 컬러 */
+    padding-left: 1vw;
+}
+
+.detail-section {
+    margin-bottom: 2.5vw;
+    padding-bottom: 2.5vw;
+    border-bottom: #ef6c586c solid 0.2vw;
+}
+
+.detail-sub-title {
+    border-left: 0.5vw solid #ef6d58; /* 포인트 컬러 */
+    padding-left: 1vw;
+    margin-bottom: 1.3vw;
+}
+
+.detail-item {
+    margin-bottom: 1.5vw;
+    display: grid;
+    width: 100%;
+    word-break: keep-all; /* 단어 단위 줄바꿈 */
+    white-space: pre-line; /* 엔터 적용 */
+}
+
+.detail-item h3 {
+    color: #ef6d58;
+    margin-bottom: 0.2vw;
+}
+
+.content-item-img {
+    width: 100%;
+    min-height: 20vw;
+    position: relative;
+    margin-bottom: 2vw;
+    border: #ef6d58 solid 2px;
+}
+
+h1 {
+    font-size: 2.8vw;
+}
+
+h2 {
+    font-size: 2vw;
+}
+
+h3 {
+    font-size: 1.5vw;
+}
+
+p {
+    font-size: 1vw;
+}
+
+
+
+

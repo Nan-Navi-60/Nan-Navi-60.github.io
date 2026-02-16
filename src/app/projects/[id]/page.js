@@ -1,69 +1,196 @@
-import { projectList } from '@/data/projectList';
-import ProjectContent from '@/components/project-contents/Registry';
-import Link from 'next/link';
-import SkillSection from '@/components/SkillSection';
+import Image from 'next/image'
 
-// 1. [필수] 정적 배포를 위해 빌드 시 페이지 ID 목록을 미리 생성
-// 미리 정의된 함수 명
-export async function generateStaticParams() {
-  return projectList.map((project) => ({
-    id: project.id.toString(),
-  }));
-}
+// 정적 파라미터 생성
+// export async function generateStaticParams() {
+//   return projectList.map((project) => ({ id: project.id.toString() }));
+// }
 
-// 2. [서버 컴포넌트] 페이지 본문
-// params는 비동기(Promise) 데이터이므로 async/await로 처리해야 합니다.
 export default async function ProjectDetail({ params }) {
   
-  // Next.js 15+ 문법 대응: params를 await로 풀어서 사용
-  const resolvedParams = await params;
-  // 실제로 호출된 id를 저장
-  const id = Number(resolvedParams.id);
+    const resolvedParams = await params;
+    const id = Number(resolvedParams.id);
 
-  // 데이터 찾기
-  const metaData = projectList.find((p) => p.id === id);
+    // const metaData = projectList.find((p) => p.id == id);
 
-  // 예외 처리 (데이터가 없을 때)
-  if (!metaData) {
-    return <div className="padding-2vw">존재하지 않는 프로젝트입니다.</div>;
-  }
+    // // 데이터가 없으면 에러 처리
+    // if (!metaData) return <div>Project Not Found</div>;
 
-  const setStack = () => {
-    return <SkillSection skills={metaData.stack}/>;
-  }
+    return (
+        <div className="project-detail-container">
+            <h1 className="detail-title">Servlet 게시판 사이트</h1>
 
-  return (
-    <div className="wrap">
-      {/* 상단 헤더 영역 */}
-      <div className="detail-header">
-        <h1 className="font-mid">{metaData.title}</h1>
-        <p className="font-sml">{metaData.desc}</p>
-        
-        <div className="detail-meta-info">
-            <span>📅 {metaData.period}</span>
-            <span>👥 {metaData.team}</span>
+            <div className="detail-section">
+                <div className="detail-sub-title">
+                    <h2>INDEX</h2>
+                </div>
+                <div className="detail-item">
+                    <h3>사이트의 기본 작동 원리와 구조의 이해</h3>
+                    <p>1. 실제 사이트의 저장, 출력, 통신, 수정 등 사용자의 요청이 실제 어떤 식으로 처리되는지 파악.</p>
+                    <p>2. 사이트와 DB 간의 통신과 결과가 사용자에게 까지 도달하는 흐름 파악</p>
+                    <p>3. 서버와 유저, DB의 개념 연결</p>
+                </div>
+            </div>
+
+            <div className="detail-section">
+                <div className="detail-sub-title">
+                    <h2>INTRODUCE</h2>
+                </div>
+                <div className="content">
+                    <div className="detail-item">
+                        <h3>JSP</h3>
+                        <div>
+                            <p>
+                                동적 웹 페이지를 구현하기 위한 기술로 서버에서 페이지를 직접 생성하여 컨텐츠를 사용자에게 노출시킨다.
+                            </p>
+                            <p>
+                                파일 내부에 Java Class를 Import하거나 코드를 작성하여 사용자의 요청에 따라 동적으로 노출시켜 주었으며,
+                            </p>
+                            <p>
+                                실제 사용자 측에서 적용될 변경사항과 위치를 직관적으로 확인할 수 있다.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="detail-item">
+                        <h3>Servlet</h3>
+                        <div>    
+                            <p>
+                                javax.servlet Library를 사용하여 사용자의 요청을 처리하고 응답한다.
+                            </p>
+                            <p>
+                                HttpServlet을 통해 사용자의 요청을 확인하고 Query를 작성하여 DB와 통신한다.
+                            </p>
+                            <p>
+                                java.sql Library를 사용하여 DB에 요청 객체와 응답 객체를 생성하며, 응답 파라미터를 사용자에게 반환한다.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="detail-item">
+                        <h3>DataBase</h3>
+                        <div>
+                            <p>
+                                MySQL를 통해 제작.
+                            </p>
+                            <p>
+                                MariaDB와의 호완이 가능하며, Java Servlet과의 통신하여 요청에 대한 응답을 처리한다.
+                            </p>
+                            <p>
+                                사용자, 게시글, 댓글의 정보를 저장하며, 사용자의 id를 게시글과 댓글에서 상속받아 연관관계를 명확히 한다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="detail-section">
+                <div className="detail-sub-title">
+                    <h2>VISUAL</h2>
+                </div>
+                <div className="content">
+                    <div className='detail-item'>
+                        <h3>main</h3>
+                        <div className='content-item-img'>
+                            <Image src={"/img/projectImg/NoticeBoard/Main.png"}
+                                alt={'main'}
+                                fill={true}
+                            />
+                        </div>
+                    </div>
+                    <div className='detail-item'>
+                        <h3>contentList</h3>
+                        <div className='content-item-img'>
+                            <Image src={"/img/projectImg/NoticeBoard/ContentsList.png"}
+                                alt={'main'}
+                                fill={true}
+                                style={{objectFit: 'contain'}}
+                            />
+                        </div>
+                    </div>
+                    <div className='detail-item'>
+                        <h3>content</h3>
+                        <div className='content-item-img'>
+                            <Image src={"/img/projectImg/NoticeBoard/ContentView.png"}
+                                alt={'main'}
+                                fill={true}
+                                style={{objectFit: 'contain'}}
+                            />
+                        </div>
+                    </div>
+                    <div className='detail-item'>
+                        <h3>comment</h3>
+                        <div className='content-item-img'>
+                            <Image src={"/img/projectImg/NoticeBoard/comment_Login.png"}
+                                alt={'main'}
+                                fill={true}
+                                style={{objectFit: 'contain'}}
+                            />
+                        </div>
+                    </div>
+                    <div className='detail-item'>
+                        <h3>login</h3>
+                        <div className='content-item-img'>
+                            <Image src={"/img/projectImg/NoticeBoard/Login.png"}
+                                alt={'main'}
+                                fill={true}
+                                style={{objectFit: 'contain'}}
+                            />
+                        </div>
+                    </div>
+                    <div className='detail-item'>
+                        <h3>SignUp</h3>
+                        <div className='content-item-img'>
+                            <Image src={"/img/projectImg/NoticeBoard/SignUp.png"}
+                                alt={'main'}
+                                fill={true}
+                                style={{objectFit: 'contain'}}
+                            />
+                        </div>
+                    </div>
+                    <div className='detail-item'>
+                        <h3>Structure</h3>
+                        <div className='content-item-img'>
+                            <Image src={"/img/projectImg/NoticeBoard/Main.png"}
+                                alt={'main'}
+                                fill={true}
+                                style={{objectFit: 'contain'}}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="detail-section">
+                <div className="detail-sub-title">
+                    <h2>TROUBLE SHOOTING</h2>
+                </div>
+                <div className="content">
+                    <div className="detail-item">
+                        <h3>1. POST 중복 요청</h3>
+                        <p>
+                            댓글을 등록한 후 해당 페이지를 새로고침할 경우 댓글이 중복으로 작성되는 현상이 발견됨.
+                        </p>
+                        <p>
+                            POST로 요청을 보대는 댓글의 경우 GET요청과 달리 페이지를 리로드 하지 않고 해당 페이지의 상태를 유지하게 된다.
+                        </p>
+                        <p>
+                            이때 HTML의 "form" Element는 해당 요청의 요청객체를 가지고 있어 새로 고침을 시도하면 해당 요청을 다시 전송하는 작업을 수행하게 된다.
+                            이를 해결하기 위해 JSP파일 자체에서 요청객체를 생성하지 않고 AJAX를 통해 댓글과 관련된 요청을 처리하였다.
+                        </p>
+                    </div>
+
+                    <div className="detail-item">
+                        <h3>2. Login Session Check</h3>
+                        <p>
+                            로그인 후 페이지에 접속을 할 경우 Login 여부를 확인할 수 없었다.
+                        </p>
+                        <p>
+                            로그인 시 login_check KEY를 사용하는 Session을 생성하였으며, 사용자가 페이지에 접속할 때마다 해당 Session의 여부를 확인한다.
+                        </p>
+                        <p>
+                            JSP내부에 조건문을 사용하여 로그인 시 로직을 활용할 수 있게 되었다.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div className='stack-list'>
-          {setStack()}
-        </div>
-
-        <div className="detail-links">
-            {metaData.repoLink && <Link href={metaData.repoLink} className="btn-link" target="_blank">GitHub</Link>}
-            {/* {metaData.demoLink && <Link href={metaData.demoLink} className="btn-link" target="_blank">Live Demo</Link>} */}
-        </div>
-      </div>
-
-      <hr className="divider" />
-
-      {/* 본문 영역 (레지스트리에서 내용 가져오기) */}
-      <div className="detail-content-area">
-        <ProjectContent id={id} />
-      </div>
-
-      <div style={{marginTop: '5vw', textAlign: 'center'}}>
-        <Link href="/" className="btn-back">목록으로 돌아가기</Link>
-      </div>
-    </div>
-  );
+    );
 }
