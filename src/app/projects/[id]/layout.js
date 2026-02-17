@@ -61,8 +61,8 @@ export default async function ProjectLayout({ children, params }) {
         {children}
       </div>
 
-      <div style={{marginTop: '5vw', textAlign: 'center'}}>
-        <Link href="/" className="btn-back">목록으로 돌아가기</Link>
+      <div className="btn-back bg-navy">
+        <Link href="/" className='white'>목록으로 돌아가기</Link>
       </div>
     </div>
   );

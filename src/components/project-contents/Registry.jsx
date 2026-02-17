@@ -17,6 +17,6 @@ export default function ProjectContent({ id }) {
 
   // 매칭되는 id가 존재하지 않음
   if (!SelectedContent) return <div className="padding-2vw">해당 Project를 찾을 수 없습니다.</div>;
-
+  
   return <SelectedContent />;
 }

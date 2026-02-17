@@ -1,68 +1,108 @@
 @import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
 
-/* 본문 스타일 */
 .project-detail-container {
-    margin: 0 10%;
-    font-family: 'nanumsquare';
+    margin: 0 auto;
+    max-width: 80%;
+    padding: 2vw 0 10vw 0;
+    font-family: 'nanumsquare', sans-serif;
+    color: #333;
 }
 
+/* 메인 타이틀 */
 .detail-title {
-    margin-top: 4vw;
-    margin-bottom: 2.5vw;
-    color: #28293e;
-    border-left: 0.5vw solid #ef6d58; /* 포인트 컬러 */
-    padding-left: 1vw;
+    font-size: 3vw;
+    font-weight: 800;
+    color: #28293e; /* 진한 네이비 텍스트 */
+    margin-bottom: 4vw;
+    padding-bottom: 1vw;
+    border-bottom: 2px solid #ef6d58; /* 포인트는 주황색 유지 */
 }
 
+/* ✨ [수정됨] 섹션 스타일 ✨ */
 .detail-section {
-    margin-bottom: 2.5vw;
-    padding-bottom: 2.5vw;
-    border-bottom: #ef6c586c solid 0.2vw;
+    background-color: #ffffff; /* 깨끗한 흰색 배경 */
+    
+    /* 1. 네이비 그림자 적용 (R:40, G:41, B:62가 네이비 #28293e입니다) */
+    /* 투명도를 0.08(8%)로 주어서 은은한 푸른 그림자 생성 */
+    box-shadow: 0 4px 20px rgba(40, 41, 62, 0.08);
+    
+    /* 2. 아주 연한 네이비 테두리 추가 (경계선 명확화) */
+    border: 1px solid rgba(40, 41, 62, 0.08);
+    
+    border-radius: 1vw;
+    padding: 3vw;
+    margin-bottom: 4vw; /* 섹션 간 간격 확보 */
+    
+    /* 호버 효과 제거! (항상 떠있는 상태 유지) */
 }
 
+/* 소제목 영역 */
 .detail-sub-title {
-    border-left: 0.5vw solid #ef6d58; /* 포인트 컬러 */
-    padding-left: 1vw;
-    margin-bottom: 1.3vw;
+    margin-bottom: 2vw;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(239, 109, 88, 0.2); /* 소제목 아래 연한 주황 줄 */
+    padding-bottom: 0.5vw;
+    width: fit-content; /* 글자 길이만큼만 줄 긋기 */
 }
 
+.detail-sub-title h2 {
+    font-size: 1.8vw;
+    font-weight: 700;
+    color: #ef6d58; /* 주황색 포인트 */
+    margin: 0;
+}
+
+/* 내용 아이템 */
 .detail-item {
-    margin-bottom: 1.5vw;
-    display: grid;
+    margin-bottom: 2.5vw;
     width: 100%;
-    word-break: keep-all; /* 단어 단위 줄바꿈 */
-    white-space: pre-line; /* 엔터 적용 */
+    word-break: keep-all;
+    white-space: pre-line;
+}
+
+.detail-item:last-child {
+    margin-bottom: 0;
 }
 
 .detail-item h3 {
-    color: #ef6d58;
-    margin-bottom: 0.2vw;
+    font-size: 1.3vw;
+    font-weight: 700;
+    color: #28293e; /* 네이비 텍스트 */
+    margin-bottom: 0.8vw;
+    display: flex;
+    align-items: center;
 }
 
+/* h3 옆에 작은 주황색 점 추가 (심심함 방지) */
+.detail-item h3::before {
+    content: '';
+    display: inline-block;
+    width: 0.4vw;
+    height: 0.4vw;
+    background-color: #ef6d58;
+    border-radius: 50%;
+    margin-right: 0.6vw;
+}
+
+.detail-item p {
+    font-size: 1.1vw;
+    line-height: 1.5; /* 가독성을 위해 줄 간격 넉넉히 */
+    color: #555;
+    margin-bottom: 0.5vw;
+    padding-left: 1vw; /* 점 위치만큼 들여쓰기 */
+}
+
+/* 이미지 컨테이너 */
 .content-item-img {
-    width: 100%;
-    min-height: 20vw;
-    position: relative;
-    margin-bottom: 2vw;
-    border: #ef6d58 solid 2px;
+    width: fit-content;
+    margin: 1vw 0;
+    border-radius: 0.5vw;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    /* 이미지 테두리도 연한 네이비로 통일 */
+    border: 1px solid rgba(40, 41, 62, 0.1); 
+    background-color: #f9f9f9;
 }
-
-h1 {
-    font-size: 2.8vw;
-}
-
-h2 {
-    font-size: 2vw;
-}
-
-h3 {
-    font-size: 1.5vw;
-}
-
-p {
-    font-size: 1vw;
-}
-
-
-
-
