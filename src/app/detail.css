@@ -96,7 +96,7 @@
 /* 이미지 컨테이너 */
 .content-item-img {
     width: fit-content;
-    margin: 1vw 0;
+    margin: 1vw auto;
     border-radius: 0.5vw;
     overflow: hidden;
     align-items: center;

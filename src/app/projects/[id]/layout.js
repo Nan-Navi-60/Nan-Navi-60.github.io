@@ -49,8 +49,14 @@ export default async function ProjectLayout({ children, params }) {
         </div>
 
         <div className="detail-links">
-            {metaData.repoLink && <Link href={metaData.repoLink} className="btn-link" target="_blank">GitHub</Link>}
-            {/* {metaData.demoLink && <Link href={metaData.demoLink} className="btn-link" target="_blank">Live Demo</Link>} */}
+            {metaData.repoLink && (
+              <div>
+                <Link href={metaData.repoLink} className="btn-link" target="_blank">
+                  GitHub
+                </Link>
+                <h4>{metaData.repoLink}</h4>
+              </div>
+            )}
         </div>
       </div>
 

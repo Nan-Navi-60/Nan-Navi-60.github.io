@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { Section } from '../ui/Section';
 import { Item } from  '../ui/Item';
 import ProjectImage from '../ui/ProjectImage';
@@ -74,7 +73,7 @@ export default async function ProjectDetail() {
                 </Item>
                 <Item subTitle={'Comment'}>
                     <ProjectImage
-                    src={'/img/projectImg/NoticeBoard/comment_Login.png'}
+                    src={'/img/projectImg/NoticeBoard/Comment_Login.png'}
                     alt='Comment' />
                 </Item>
                 <Item subTitle={'Login'}>
@@ -91,7 +90,7 @@ export default async function ProjectDetail() {
 
             <Section title={'DataBase'}>
                 <Item subTitle={'null'}>
-                    <ProjectImage src={'/img/projectImg/NoticeBoard/diagram.png'} alt='Diagram' />
+                    <ProjectImage src={'/img/projectImg/NoticeBoard/diagram.png'} alt='Diagram' maxWidth='40%' />
                 </Item>
             </Section>
 

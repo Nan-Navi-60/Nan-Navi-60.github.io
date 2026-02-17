@@ -254,6 +254,12 @@ a:visited, a:hover, a:active {
     margin-top: 1vw;
 }
 
+.detail-links div{
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+}
+
 .btn-link {
     padding: 0.5vw 1.5vw;
     background-color: #28293e;
@@ -267,7 +273,7 @@ a:visited, a:hover, a:active {
     width: 100%;
     border: 0;
     border-top: 1px solid #ddd;
-    margin: 2vw 0;
+    margin: 1vw 0;
 }
 
 .btn-back {
