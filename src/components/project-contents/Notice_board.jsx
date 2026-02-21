@@ -1,6 +1,7 @@
 import { Section } from '../ui/Section';
 import { Item } from  '../ui/Item';
 import ProjectImage from '../ui/ProjectImage';
+import Code from '../ui/Code';
 
 export default async function ProjectDetail() {
   
@@ -47,44 +48,271 @@ export default async function ProjectDetail() {
                         MySQL를 통해 제작.
                     </p>
                     <p>
-                        MariaDB와의 호완이 가능하며, Java Servlet과의 통신하여 요청에 대한 응답을 처리한다.
+                        MySQL과의 호환이 가능하며, Java Servlet과의 통신하여 요청에 대한 응답을 처리한다.
                     </p>
                     <p>
-                        사용자, 게시글, 댓글의 정보를 저장하며, 사용자의 id를 게시글과 댓글에서 상속받아 연관관계를 명확히 한다.
+                        사용자, 게시글, 댓글의 정보를 저장하며, 사용자의 id를 게시글과 댓글에서 외래키 참조하여 연관관계를 명확히 한다.
                     </p>
+                </Item>
+                <Item subTitle={'JDBC 직접 연결'}>
+                    <p>
+                        JDBC Connection을 활용하여 mySQL 연결
+                    </p>
+                    <Code language={'java'}>
+                    {`
+public profileDAO() {
+    try {
+        String dbURL = "jdbc:mysql://localhost:3306/noticedb";
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+                    `}</Code>
                 </Item>
             </Section>
 
             <Section title={'VISUAL'}>
                 <Item subTitle={'Main'}>
+                    <p>
+                        모든 카테고리에 대하여 간략한 게시글 목록을 최신순으로 볼 수 있는 페이지
+                    </p>
                     <ProjectImage
                     src={'/img/projectImg/NoticeBoard/Main.png'}
                     alt='main' />
                 </Item>
-                <Item subTitle={'ContentList'}>
-                    <ProjectImage
-                    src={'/img/projectImg/NoticeBoard/ContentsList.png'}
-                    alt='ContentsList' />
-                </Item>
-                <Item subTitle={'Content'}>
-                    <ProjectImage
-                    src={'/img/projectImg/NoticeBoard/ContentView.png'}
-                    alt='ContentView' />
-                </Item>
-                <Item subTitle={'Comment'}>
-                    <ProjectImage
-                    src={'/img/projectImg/NoticeBoard/Comment_Login.png'}
-                    alt='Comment' />
-                </Item>
                 <Item subTitle={'Login'}>
+                    <p>
+                        Login 진행 페이지
+                    </p>
                     <ProjectImage
                     src={'/img/projectImg/NoticeBoard/Login.png'}
                     alt='Login' />
                 </Item>
                 <Item subTitle={'SignUp'}>
+                    <p>
+                        회원 가입 진행 페이지
+                    </p>
                     <ProjectImage
                     src={'/img/projectImg/NoticeBoard/SignUp.png'}
                     alt='SignUp' />
+                </Item>
+                <Item subTitle={'ContentList'}>
+                    <p>
+                        각 카테고리에 대한 게시글 목록을 최신 순으로 볼 수 있는 페이지
+                    </p>
+                    <ProjectImage
+                    src={'/img/projectImg/NoticeBoard/ContentsList.png'}
+                    alt='ContentsList' />
+                </Item>
+                <Item subTitle={'Content'}>
+                    <p>
+                        게시글 디테일 페이지
+                    </p>
+                    <ProjectImage
+                    src={'/img/projectImg/NoticeBoard/ContentView.png'}
+                    alt='ContentView' />
+                </Item>
+                <Item subTitle={'Comment'}>
+                    <p>
+                        게시글 디테일 페이지의 댓글 영역(로그인 시 화면)
+                    </p>
+                    <ProjectImage
+                    src={'/img/projectImg/NoticeBoard/Comment_Login.png'}
+                    alt='Comment' />
+                </Item>
+            </Section>
+
+            <Section title={'FLOWCHART'}>
+                <Item subTitle={'SystemArchitecture'}>
+                    <p>
+                        전체 시스템 구조
+                    </p>
+                    <ProjectImage src={'/img/projectImg/NoticeBoard/SystemArchitecture.png'} alt='.'/ >
+                </Item>
+                <Item subTitle={'Client - Server 작동 흐름'}>
+                    <p>
+                        Login 플로우 차트로, Client 요청에 대한 기본적인 작동 흐름이다.
+                    </p>
+                    <ProjectImage src={'/img/projectImg/NoticeBoard/Architecture.png'} alt='.'/ >
+                </Item>
+            </Section>
+
+            <Section title={'STRUCTURE'}>
+                <Item subTitle={'Client Request'}>
+                    <p>로그인 페이지의 코드로 form의 'action'과 method 속성을 통해 요청 형식을 지정한다.</p>
+                    <p>input의 name을 통해 요청 파라미터의 key를 지정하며, 'type="submit"'을 사용하여 요청을 전송한다. </p>
+                    <Code language={'html'}>
+                        {`
+<div class="login-container">
+    <h2>로그인</h2>
+    <form action="/login_Servlet" method="post">
+        <input type="text" name="id" placeholder="아이디" required>
+        <input type="password" name="password" placeholder="비밀번호" required>
+        <input type="submit" value="로그인">
+    </form>
+</div>
+                        `}
+                    </Code>
+                </Item>
+                <Item subTitle={'Servlet Response'}>
+                    <p>Cilent의 요청 파라미터를 수신하고 응답.</p>
+                    <p>HttpServletRequest을 통해 사용자의 요청을 받는다.</p>
+                    <p>HttpServletResponse 통해 사용자의 요청에 응답한다.</p>
+                    <Code language={'java'}>
+                        {`
+@WebServlet("/login_Servlet")
+public class login_Servlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    throws ServletException, IOException {
+        // 폼에서 전송된 데이터를 받기
+        String id = request.getParameter("id");
+        String password = request.getParameter("password");
+        
+        HttpSession session = request.getSession();
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+    }
+}
+                        `}
+                    </Code>
+                </Item>
+                <Item subTitle={'Login & Session'}>
+                    <Section title={''}>
+                        <Item subTitle={'Login'}>
+                            <p>DB에 존재하는 동일한 ID에 대하여 PASSWORD를 검증한다.</p>
+                            <p>로그인 성공 시 0을 반환하며,</p>
+                            <p>비밀번호 불일치: -1, ID 오류: -2, 예외발생 시:  -3를 반환 한다.</p>
+                            <Code language={'java'}>
+                                {`
+try {
+    pstmt = conn.prepareStatement(SQL);
+    pstmt.setString(1, ID);
+    rs = pstmt.executeQuery();
+    if (rs.next()) {
+        String storedPassword = rs.getString("PASSWORD");
+    
+        if (storedPassword.equals(PASSWORD))
+            return 0; // 로그인 성공
+        else 
+            return -1; // 비밀번호 불일치
+    } else
+        return -2; // 사용자가 존재하지 않음
+}catch (SQLException e) {
+    e.printStackTrace();
+    return -3; // SQL 예외 발생
+}finally {
+    closeResources(rs, pstmt);
+}
+                                `}
+                            </Code>
+                        </Item>
+                        <Item subTitle={'Login Session'}>
+                            <p>Login인 성공적으로 완료된 경우 Session을 통해 해당 정보를 저장한다.</p>
+                            <p>생성한 세션의 대한 정보는 Client에게 전달 된다.</p>
+                            <Code language={'java'}>
+                                {`
+HttpSession session = request.getSession();
+session.setAttribute("login_check",id);
+request.setAttribute("check", loginResult);
+request.getRequestDispatcher("index.jsp")
+.forward(request, response);
+                                `}
+                            </Code>
+                        </Item>
+                    </Section>
+                </Item>
+                
+                <Item subTitle={'Pagination'}>                    
+                    <Section title={''}>
+                        <Item subTitle={'Servlet'}>
+                            <p>시작 번호와 마지막 번호를 계산하여 DB에 요청, DB의 결과를 하나씩 list에 담아 반환값 생성</p>
+                            <Code language={'java'}>
+                                {`
+try {
+    conn = dao.getconnection();
+    pstmt = conn.prepareStatement(SQL);
+    int setStartId = page_size*(pageNumber-1);
+    int setLastId = page_size;
+    System.out.println("setLastId :"+setStartId);
+    pstmt.setInt(1, setStartId);
+    pstmt.setInt(2, setLastId);
+    
+    rs = pstmt.executeQuery();
+    
+    while (rs.next()) {
+        contents content = new contents();
+
+        content.setTitle(rs.getString("title"));
+        content.setId(rs.getInt("id"));
+        content.setContents_img(rs.getString("contents_img"));
+        list.add(content);
+    }
+}
+                                `}
+                            </Code>
+                        </Item>                        
+                        <Item subTitle={'Query'}>
+                            <p>파라미터로 전달 받은 setStartId와 setLastId를 통해 정해진 위치와 양의 게시글 정보를 가져온다.</p>
+                            <Code language={'java'}>
+                                {`
+String SQL
+= "SELECT * FROM contents ORDER BY id DESC LIMIT ?,?";
+pstmt.setInt(1, setStartId);
+pstmt.setInt(2, setLastId);
+                                `}
+                            </Code>
+                        </Item>
+                        <Item subTitle={'JSP'}>
+                            <p>JSP 페이지에서 Java를 활용하여 게시글 목록 적용</p>
+                            <Code language={'html'}>
+                                {`
+<ul>
+    <%
+        
+        int pageNumber = 1;
+        Content_mainlist mainlist = new Content_mainlist();
+
+        if (request.getParameter("setpageNumber") != null){
+            pageNumber 
+            = Integer
+            .parseInt(request.getParameter("setpageNumber"));
+        }
+        ArrayList<contents> list = mainlist.getList(pageNumber);
+        
+        for (int i = 0; i < list.size(); i++){
+            System.out.println("i :"+ i);
+            System.out.println("list.size() :"+ list.size());	
+    %>
+    <li>
+    <% if( list.get(i).getContents_img().equals("1")){ %>
+        <img src="upload/1.jpg">
+    <%}else{ %>
+        <img src="upload/<%= list.get(i).getContents_img() %>">
+    <%} %>
+        <a 
+        href="/contentDetail_Servlet?
+        id=<%= list.get(i).getId()%>">
+        <%= list.get(i).getTitle() %></a>
+    </li>
+    <%} %>
+</ul>
+<%
+int total_pageNumber = mainlist.getLastId() / 5;
+total_pageNumber += (mainlist.getLastId() % 5 != 0) ? 1 : 0;
+for (int i = 1; i <= total_pageNumber; i++){%>
+<a href="index.jsp?setpageNumber=<%= i %>"><%= i %></a>
+<% } %>
+                                `}
+                            </Code>
+                        </Item>
+                    </Section>
+                </Item>
+                <Item subTitle={'Duplicate Images'}>
+                    <p />
                 </Item>
             </Section>
 
@@ -93,6 +321,7 @@ export default async function ProjectDetail() {
                     <ProjectImage src={'/img/projectImg/NoticeBoard/diagram.png'} alt='Diagram' maxWidth='40%' />
                 </Item>
             </Section>
+
 
             <Section title={'TROUBLE SHOOTING'}>
                 <Item subTitle={'1. POST 중복 요청'}>
