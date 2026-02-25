@@ -141,7 +141,7 @@ public profileDAO() {
 
             <Section title={'STRUCTURE'}>
                 <Item subTitle={'Client Request'}>
-                    <p>로그인 페이지의 코드로 form의 'action'과 method 속성을 통해 요청 형식을 지정한다.</p>
+                    <p>로그인 페이지의 코드로 form의 'action'과 'method' 속성을 통해 요청 형식을 지정한다.</p>
                     <p>input의 name을 통해 요청 파라미터의 key를 지정하며, 'type="submit"'을 사용하여 요청을 전송한다. </p>
                     <Code language={'html'}>
                         {`
