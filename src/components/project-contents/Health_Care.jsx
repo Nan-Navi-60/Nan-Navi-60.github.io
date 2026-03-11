@@ -2,6 +2,7 @@ import { Section } from '../ui/Section';
 import { Item } from  '../ui/Item';
 import ProjectImage from '../ui/ProjectImage';
 import Code from '../ui/Code';
+import Mermaid from '../ui/Mermaid';
 
 export default async function ProjectDetail() {
     return (
@@ -23,7 +24,7 @@ export default async function ProjectDetail() {
                         Python 기반 웹 프레임워크로 기능별 앱 분리 설계를 통해 유지보수성을 높였다.
                     </p>
                     <p>
-                        chat(템플릿 렌더·세션), gemini(대화 API), myyolo(이미지 분석), user(개인정보) 앱으로 구성하여 각 기능을 독립적으로 관리한다.
+                        chat(이미지 업로드·템플릿), gemini(AI 대화·프롬프트), myyolo(YOLO 분석·영양정보), user(인증·개인정보), index(메인페이지), common(공통기능) 앱으로 구성하여 각 기능을 독립적으로 관리한다.
                     </p>
                     <p>
                         세션 기반 인증과 CSRF 보호를 통해 보안성을 확보하고, 일관된 JSON 응답 스키마를 사용한다.
@@ -42,48 +43,66 @@ export default async function ProjectDetail() {
                 </Item>
                 <Item subTitle={'YOLOv9 + 커스텀 데이터셋'}>
                     <p>
-                        COCO 데이터셋의 10개 음식 클래스에 한국 음식 60여 종을 추가 학습시켰다.
+                        COCO 데이터셋의 음식 클래스에 한국 음식 60여 종을 추가 학습시켰다.
                     </p>
                     <p>
                         불고기, 삼겹살, 짜장면, 김치찌개 등 한국 대중 음식의 95% 이상 정확도를 달성했다.
                     </p>
                     <Code language={'python'}>
                     {`
-# COCO + 커스텀 모델 병렬 실행
+# 실제 YOLO 모델 병렬 실행 구현
 model_coco = YOLO('yolov9s.pt')  # COCO 데이터셋
 model_food = YOLO('best.pt')     # 한국 음식 커스텀 모델
 
 results_coco = model_coco.predict(source=image_path, conf=0.6)
 results_food = model_food.predict(source=image_path, conf=0.9)
 
-# 정확도 기반 필터링으로 오판 방지
-if confidence > 0.8:  # 80% 이상일 때만 결과 채택
-    detected_foods.append(food_name)
+# 실제 음식 클래스 ID 필터링
+food_class_ids = [46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 81, 82, 83, 1, 2, 3]
+for cls in boxes_coco.cls:
+    if int(cls) in food_class_ids:
+        labels_combined.append(model_coco.names[int(cls)])
+
+# 커스텀 모델 결과 추가
+for cls in boxes_food.cls:
+    labels_combined.append(model_food.names[int(cls)])
                     `}
                     </Code>
                 </Item>
-                <Item subTitle={'Google Gemini 2.5 Flash + 페르소나 시스템'}>
+                <Item subTitle={'Google Gemini 2.0 Flash + 페르소나 시스템'}>
                     <p>
-                        3가지 AI 캐릭터(헬스 트레이너, 여사친, 비서)가 각각 다른 말투와 성격으로 대화한다.
+                        3가지 AI 캐릭터(김계진-PT트레이너, 박민아-친한친구, 윤서린-비서)가 각각 다른 말투와 성격으로 대화한다.
                     </p>
                     <p>
-                        파일 기반 대화 기록 관리로 4-5턴의 중장기 기억을 구현하여 토큰을 최적화했다.
+                        파일 기반 대화 기록 관리로 6턴의 중장기 기억을 구현하여 토큰을 최적화했다.
                     </p>
                     <Code language={'python'}>
                     {`
-# 페르소나별 프롬프트 로드
-chatBotData = load_prompt(f"gemini/prompts/{persona}.txt")
+# 실제 페르소나 파일 로드 (gyejin.txt, mina.txt, seorin.txt)
+personaFile = os.path.join("gemini/prompts/", f"{persona}.txt")
+chatBotData = load_prompt(personaFile)
 
 # 대화 기록 + 개인정보 통합 프롬프트
 full_prompt = f"""
-캐릭터 설정: {chatBotData}
-이전 대화 내용: {chatLog}  # 4-5턴 파일 저장
-사용자 개인정보: 알레르기({allergy}), 신장({height}), 체중({weight})
-현재 질문: {message}
+캐릭터 정보: {chatBotData}
+이전 대화 내용: {chatLog}
+사용자 이름: {request.session.get("userName")}
+사용자의 알레르기: {personalData.Allergy}
+사용자의 신장: {personalData.Height}
+사용자의 몸무게: {personalData.Weight}
+현재 대화: {message}
 """
 
-# 4턴마다 대화 기록 초기화로 토큰 관리
-if chatLogCount >= 4:
+# Gemini 2.0 Flash 모델 사용
+client = genai.Client(api_key=settings.GEMINI_API_KEY)
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=full_prompt,
+    config=types.GenerateContentConfig(temperature=0.1)
+)
+
+# 6턴마다 대화 기록 초기화로 토큰 관리
+if chatLogCount >= 6:
     createChatLog(request)  # 새 대화 파일 생성
                     `}
                     </Code>
@@ -138,103 +157,122 @@ if chatLogCount >= 4:
                     <ProjectImage src={'/img/projectImg/HealthCare/ChoicePersonalLogic.png'} alt='PersonalLogic' />
                 </Item>
             </Section>
-
             <Section title={'FLOWCHART'}>
                 <Item subTitle={'System Architecture'}>
                     <p>전체 시스템 구조 및 데이터 흐름</p>
-                    {/* [IMAGE: SystemArchitecture.png] */}
-                </Item>
-                <Item subTitle={'Food Analysis Flow'}>
-                    <p>음식 이미지 업로드부터 AI 분석까지의 전체 프로세스</p>
-                    {/* [IMAGE: FoodAnalysisFlow.png] */}
+                    <Mermaid chart={`
+flowchart TD
+    A[사용자] --> B[Django Web Server]
+    B --> C{로그인 확인}
+    C -->|비로그인| D[메인 페이지]
+    C -->|로그인| E[채팅 페이지]
+    
+    E --> F[캐릭터 선택]
+    F --> G[김계진/박민아/윤서린]
+    
+    E --> H[텍스트 입력]
+    H --> I[Gemini API]
+    I --> J[AI 응답]
+    
+    E --> K[이미지 업로드]
+    K --> L[YOLO 분석]
+    L --> M[영양정보 조회]
+    M --> N[Gemini 분석]
+    N --> O[맞춤형 건강조언]
+    
+    I --> P[대화기록 저장]
+    P --> Q[파일 기반 기억]
+    
+    style A fill:#e1f5fe
+    style I fill:#f3e5f5
+    style L fill:#fff3e0
+    style Q fill:#e8f5e8
+                    `} />
                 </Item>
             </Section>
-
             <Section title={'STRUCTURE'}>
                 <Item subTitle={'AI 캐릭터 페르소나 시스템'}>
                     <Section title={''}>
-                        <Item subTitle={'3가지 캐릭터 설정'}>
-                            <p>헬스 트레이너, 여사친, 비서 캐릭터가 각각 다른 성격과 말투로 건강 상담을 제공한다.</p>
-                            <p>캐릭터별 프롬프트 파일을 통해 일관된 페르소나를 유지하며, 사용자에게 친근하고 재미있는 경험을 제공한다.</p>
+                        <Item subTitle={'3가지 실제 캐릭터 설정'}>
+                            <p>김계진(PT트레이너), 박민아(친한친구), 윤서린(비서) 캐릭터가 각각 다른 성격과 말투로 건강 상담을 제공한다.</p>
+                            <p>실제 프롬프트 파일(gyejin.txt, mina.txt, seorin.txt)을 통해 일관된 페르소나를 유지한다.</p>
                             <Code language={'python'}>
                             {`
-# 캐릭터별 프롬프트 파일 로드
-def load_prompt(file_path):
-    with open(file_path, 'r', encoding='utf-8') as f:
+# 실제 캐릭터별 프롬프트 파일 로드
+def load_prompt(filename):
+    with open(filename, encoding='utf-8') as f:
         return f.read()
 
-# 헬스 트레이너: 열정적이고 전문적인 조언
-trainer_prompt = load_prompt("gemini/prompts/trainer.txt")
+# 김계진: 에너지 넘치는 PT 트레이너 (삣삐 말투, 기가차드 밈)
+# 박민아: 친근한 친구 (INFP, 음슴체, 말장난)  
+# 윤서린: 전문적인 비서 (ISTJ, 업무적 말투, ~씨 호칭)
 
-# 여사친: 친근하고 공감적인 대화
-friend_prompt = load_prompt("gemini/prompts/friend.txt")
-
-# 비서: 정확하고 체계적인 정보 제공
-secretary_prompt = load_prompt("gemini/prompts/secretary.txt")
+personaFile = os.path.join("gemini/prompts/", f"{persona}.txt")
+chatBotData = load_prompt(personaFile)
                             `}
                             </Code>
                         </Item>
                         <Item subTitle={'캐릭터 전환 시스템'}>
                             <p>JavaScript에서 캐릭터 선택 시 dataset.persona에 저장하고 채팅 내역을 초기화한다.</p>
-                            <ProjectImage src={'/img/projectImg/HealthCare/ChatPersonalProfile-Modal1.png'} alt='Character Selection' maxWidth='60%' />
                             <Code language={'javascript'}>
                             {`
-// 캐릭터 선택 시 페르소나 저장 및 채팅 초기화
-function selectCharacter(persona) {
-    document.getElementById('messages').dataset.persona = persona;
-    clearChatHistory();  // 페이지 새로고침 없이 채팅 초기화
+// 실제 캐릭터 전환 구현
+document.getElementById("chatBotList").addEventListener("click", async function(event){
+    const target = event.target;
+    if (!target.dataset.persona) return;
     
-    // 선택된 캐릭터 UI 업데이트
-    updateCharacterUI(persona);
-}
+    // 채팅 기록 초기화
+    const cleanResult = await cleanChatLog();
+    if (!cleanResult) {
+        alert("채팅 기록 초기화 실패");
+        return;
+    }
 
-// AJAX 요청 시 페르소나 정보 포함
-function sendMessage(message) {
-    const persona = document.getElementById('messages').dataset.persona;
-    
-    $.ajax({
-        url: '/gemini/pushChatLog/',
-        data: {
-            'message': message,
-            'persona': persona,
-            'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
-        }
-    });
-}
+    // 새 페르소나 설정
+    const persona = target.dataset.persona;
+    const messages = document.getElementById("messages");
+    messages.dataset.persona = persona;
+    messages.innerHTML = "";
+
+    // 캐릭터별 시작 메시지 출력
+    chatbot = chatBotProfile[persona];
+    getMessage(chatbot.startMessage);
+})
                             `}
                             </Code>
                         </Item>
                     </Section>
                 </Item>
-
                 <Item subTitle={'파일 기반 기억 보강 시스템'}>
                     <Section title={''}>
                         <Item subTitle={'대화 기록 관리'}>
-                            <p>Gemini 2.5 Flash의 3턴 단기 기억을 4-5턴으로 확장하기 위해 파일 기반 저장을 사용한다.</p>
-                            <p>사용자별 채팅 로그 파일을 생성하고, 일정 턴마다 초기화하여 토큰을 최적화한다.</p>
+                            <p>Gemini 2.0 Flash의 단기 기억을 6턴으로 확장하기 위해 파일 기반 저장을 사용한다.</p>
+                            <p>사용자별 채팅 로그 파일을 생성하고, 6턴마다 초기화하여 토큰을 최적화한다.</p>
                             <Code language={'python'}>
                             {`
+# 실제 대화 기록 관리 구현
 def writeChatLog(request, message):
     userId = request.session.get("userId")
     userName = request.session.get("userName")
     fileName = f"chatlog_{userId}"
     filePath = os.path.join("gemini/chatlog", fileName)
     
-    # 사용자 메시지와 AI 응답을 구분하여 저장
+    chatLog = ""
+    # 사용자 메시지를 파일에 추가하고 전체 로그 읽기
     with open(filePath, "a+", encoding="utf-8") as f:
-        f.write(f"{userName}: {message}\\n")
-        f.seek(0)
+        f.write("{0}: {1}\\n".format(userName, message))
+        f.seek(0)  # 파일 처음으로 이동
         chatLog = f.read()
     
     return chatLog
 
-def manageChatLogCount(request):
-    chatLogCount = request.session.get("chatLogCount", 1)
+def requestGemini(request, message, persona):
+    chatLogCount = request.session.get("chatLogCount")
     
-    # 4턴마다 대화 기록 초기화 (토큰 최적화)
-    if chatLogCount >= 4:
+    # 6회 이상이면 로그 초기화
+    if chatLogCount >= 6:
         request.session["chatLogCount"] = 1
-        createChatLog(request)  # 새 대화 파일 생성
+        createChatLog(request)
     else:
         request.session["chatLogCount"] = chatLogCount + 1
                             `}
@@ -244,75 +282,76 @@ def manageChatLogCount(request):
                             <p>캐릭터 설정, 대화 기록, 개인정보를 하나의 프롬프트로 통합하여 맞춤형 응답을 생성한다.</p>
                             <Code language={'python'}>
                             {`
-def generateResponse(request, message, persona):
-    # 1. 캐릭터 프롬프트 로드
-    chatBotData = load_prompt(f"gemini/prompts/{persona}.txt")
+# 실제 Gemini API 호출 구현
+def requestGemini(request, message, persona):
+    # 개인정보 불러오기 (예외 처리 포함)
+    try:
+        personalData = connectPersonalData(userId)
+    except ObjectDoesNotExist:
+        personalData = SimpleNamespace(
+            Allergy="없음", Height="알 수 없음", Weight="알 수 없음"
+        )
+
+    # Gemini 2.0 Flash 클라이언트 초기화
+    client = genai.Client(api_key=settings.GEMINI_API_KEY)
+    model_name = "gemini-2.0-flash"
     
-    # 2. 대화 기록 불러오기
-    chatLog = readChatLog(request)
-    
-    # 3. 사용자 개인정보 조회
-    personalData = connectPersonalData(request.session.get("userId"))
-    
-    # 4. 통합 프롬프트 구성
+    # 실제 프롬프트 파일 로드
+    personaFile = os.path.join("gemini/prompts/", f"{persona}.txt")
+    chatBotData = load_prompt(personaFile)
+
+    # 통합 프롬프트 구성
     full_prompt = f"""
-    캐릭터 설정: {chatBotData}
+    캐릭터 정보: {chatBotData}
     이전 대화 내용: {chatLog}
     사용자 이름: {request.session.get("userName")}
-    개인 건강 정보:
-    - 알레르기: {personalData.Allergy or "알 수 없음"}
-    - 신장: {personalData.Height or "알 수 없음"}cm
-    - 체중: {personalData.Weight or "알 수 없음"}kg
-    
-    현재 사용자 질문: {message}
-    
-    위 정보를 바탕으로 캐릭터 설정에 맞는 말투로 답변해주세요.
+    사용자의 알레르기: {personalData.Allergy}
+    사용자의 신장: {personalData.Height}
+    사용자의 몸무게: {personalData.Weight}
+    현재 대화: {message}
     """
     
-    return gemini_api_call(full_prompt)
+    # Gemini에 프롬프트 전송
+    response = client.models.generate_content(
+        model=model_name,
+        contents=full_prompt,
+        config=types.GenerateContentConfig(temperature=0.1)
+    )
+    
+    return {'result': 0, 'message': response.text}
                             `}
                             </Code>
                         </Item>
                     </Section>
                 </Item>
-
                 <Item subTitle={'음식 인식 및 분석 프로세스'}>
                     <Section title={''}>
                         <Item subTitle={'이미지 업로드 및 검증'}>
-                            <p>확장자 검증과 진행률 표시를 통해 안전한 이미지 업로드를 처리한다.</p>
+                            <p>확장자 검증과 기존 이미지 자동 삭제를 통해 안전한 이미지 업로드를 처리한다.</p>
                             <Code language={'javascript'}>
                             {`
-// 이미지 업로드 검증 및 진행률 표시
-function uploadImage(file) {
-    // 확장자 검증
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-    if (!allowedTypes.includes(file.type)) {
-        alert('JPG, PNG 파일만 업로드 가능합니다.');
+// 이미지 업로드 검증 구현
+document.getElementById("image").addEventListener("change", function() {
+    const file = this.files[0];
+    if (!file) return;
+
+    // 확장자 검사
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    if (!allowedExtensions.includes(fileExtension)) {
+        alert("이미지 파일만 업로드할 수 있습니다 (jpg, jpeg, png, gif, webp).");
+        this.value = ""; // 선택한 파일 초기화
         return;
     }
-    
-    const formData = new FormData();
-    formData.append('image', file);
-    
-    $.ajax({
-        url: '/myyolo/analyze_image/',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        xhr: function() {
-            const xhr = new window.XMLHttpRequest();
-            // 업로드 진행률 표시
-            xhr.upload.addEventListener("progress", function(evt) {
-                if (evt.lengthComputable) {
-                    const percentComplete = evt.loaded / evt.total * 100;
-                    updateProgressBar(percentComplete);
-                }
-            });
-            return xhr;
-        }
-    });
-}
+
+    const image = new FormData();
+    image.append("image", file);
+    waitMessageBtn();
+    const persona = document.getElementById("messages").dataset.persona;
+    uploadImage(image, persona);
+    this.value = ""; // 선택한 파일 초기화
+})
                             `}
                             </Code>
                         </Item>
@@ -320,37 +359,41 @@ function uploadImage(file) {
                             <p>COCO 데이터셋과 커스텀 한국 음식 모델을 병렬로 실행하여 정확도를 높인다.</p>
                             <Code language={'python'}>
                             {`
-def analyze_food_image(image_path):
-    # 두 모델 병렬 실행
+# YOLO 병렬 실행 구현
+def run_yolo_on_image(image_path_obj):
+    image_path = image_path_obj.path
+    
+    # 두 개의 YOLO 모델 불러오기
+    model_coco = YOLO('yolov9s.pt')  # COCO pretrained
+    model_food = YOLO('best.pt')     # 사용자 음식 모델
+
+    # 이미지 추론
     results_coco = model_coco.predict(source=image_path, conf=0.6)
     results_food = model_food.predict(source=image_path, conf=0.9)
+
+    labels_combined = []
+
+    # COCO 음식 클래스 ID 필터링
+    food_class_ids = [46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 81, 82, 83, 1, 2, 3]
+    boxes_coco = results_coco[0].boxes
+    if boxes_coco is not None:
+        for cls in boxes_coco.cls:
+            if int(cls) in food_class_ids:
+                labels_combined.append(model_coco.names[int(cls)])
+
+    # 커스텀 음식 모델 결과
+    boxes_food = results_food[0].boxes
+    if boxes_food is not None:
+        for cls in boxes_food.cls:
+            labels_combined.append(model_food.names[int(cls)])
+
+    # 중복 제거
+    labels_combined = list(set(labels_combined))
     
-    detected_foods = []
-    
-    # COCO 음식 클래스 필터링 (10개 클래스)
-    food_class_ids = [46, 47, 48, 49, 50, 51, 52, 53, 54, 55]
-    for result in results_coco:
-        for box in result.boxes:
-            if int(box.cls) in food_class_ids and box.conf > 0.8:
-                food_name = model_coco.names[int(box.cls)]
-                detected_foods.append({
-                    'name': food_name,
-                    'confidence': float(box.conf),
-                    'source': 'COCO'
-                })
-    
-    # 커스텀 한국 음식 모델 결과
-    for result in results_food:
-        for box in result.boxes:
-            if box.conf > 0.8:  # 80% 이상 정확도만 채택
-                food_name = model_food.names[int(box.cls)]
-                detected_foods.append({
-                    'name': food_name,
-                    'confidence': float(box.conf),
-                    'source': 'Custom'
-                })
-    
-    return detected_foods
+    return {
+        'result': 0 if labels_combined else 1,
+        'labels': labels_combined if labels_combined else "음식에 해당하는 이미지가 없습니다."
+    }
                             `}
                             </Code>
                         </Item>
@@ -358,43 +401,34 @@ def analyze_food_image(image_path):
                             <p>감지된 음식의 영양 정보를 DB에서 조회하고 AI에게 전달하여 맞춤형 분석을 받는다.</p>
                             <Code language={'python'}>
                             {`
-def get_nutrition_analysis(detected_foods, user_personal_data):
-    nutrition_info = []
+# 영양 정보 조회 구현
+def get_calorie_info_by_food_name(food_name):
+    try:
+        calorie_obj = Calorie.objects.get(calorie_per_serving_eg=food_name)
+        result = (
+            f"{calorie_obj.food_name}: "
+            f"{calorie_obj.calorie_per_serving} kcal</br>"
+            f"탄수화물 {calorie_obj.carbohydrate}g</br>"
+            f"단백질 {calorie_obj.protein}g</br>"
+            f"지방 {calorie_obj.fat}g</br>"
+        )
+        return result
+    except Calorie.DoesNotExist:
+        return "none"
+
+def analyze_image(request):
+    # 이미지 분석 후 Gemini에 영양정보와 함께 전달
+    detection_result = run_yolo_on_image(image_path)
+    detected_labels = detection_result['labels']
+    calorie_summary = generate_calorie_summary(detected_labels)
     
-    for food in detected_foods:
-        try:
-            # AWS RDS에서 영양 정보 조회
-            calorie_obj = Calorie.objects.get(
-                calorie_per_serving_eg=food['name']
-            )
-            
-            nutrition_info.append({
-                'food_name': calorie_obj.food_name,
-                'calories': calorie_obj.calorie_per_serving,
-                'carbohydrate': calorie_obj.carbohydrate,
-                'protein': calorie_obj.protein,
-                'fat': calorie_obj.fat,
-                'confidence': food['confidence']
-            })
-        except Calorie.DoesNotExist:
-            # DB에 없는 음식은 기본 정보로 처리
-            nutrition_info.append({
-                'food_name': food['name'],
-                'calories': '정보 없음',
-                'note': 'DB에 영양 정보가 없습니다.'
-            })
+    # Gemini 요청 메시지
+    gemini_message = ("내가 오늘 먹은 음식은 " + calorie_summary + 
+                     " 이야 어때? 내가 보낸 해당 음식의 칼로리와 영양성분정보는 "
+                     "텍스트 그대로 반환하고 해당 정보를 바탕으로 나의 식사를 평가해줘.")
     
-    # AI에게 영양 정보와 개인 데이터를 함께 전달
-    analysis_prompt = f"""
-    감지된 음식: {nutrition_info}
-    사용자 정보: 알레르기({user_personal_data.Allergy}), 
-                신장({user_personal_data.Height}cm), 
-                체중({user_personal_data.Weight}kg)
-    
-    위 음식에 대한 영양 분석과 개인 맞춤 건강 조언을 제공해주세요.
-    """
-    
-    return gemini_api_call(analysis_prompt)
+    geminiResult = requestGemini(request, gemini_message, persona)
+    return JsonResponse({"result": geminiResult['result'], "calorieList": geminiResult['message']})
                             `}
                             </Code>
                         </Item>
@@ -405,41 +439,104 @@ def get_nutrition_analysis(detected_foods, user_personal_data):
                     <p>사용자의 알레르기, 신체 조건을 실시간으로 AI에 반영하여 맞춤형 식단 추천과 건강 조언을 제공한다.</p>
                     <Code language={'python'}>
                     {`
+# 개인정보 업데이트 구현
 def updatePersonalData(request):
     userId = request.session.get("userId")
-    allergy = request.POST.get('allergy', '알 수 없음')
-    height = request.POST.get('height', '알 수 없음')
-    weight = request.POST.get('weight', '알 수 없음')
+    allergy = request.POST.get("allergy")
+    height = request.POST.get("height")
+    weight = request.POST.get("weight")
+
+    # 데이터가 없으면 새로 생성
+    if not PersonalData.objects.filter(pk=userId).exists():
+        result = setPersonalData(userId, allergy, height, weight)
+        return JsonResponse({"result": result})
+
+    try:
+        personalData = PersonalData.objects.get(pk=userId)
+        personalData.Allergy = allergy
+        personalData.Height = height
+        personalData.Weight = weight
+        personalData.save()
+        return JsonResponse({"result": 0})  # 성공
+    except Exception:
+        return JsonResponse({"result": 1})  # 실패
+
+def connectPersonalData(userId):
+    return PersonalData.objects.get(pk=userId)
+                    `}
+                    </Code>
+                </Item>
+
+                <Item subTitle={'로그인 접근 제어 시스템'}>
+                    <p>비로그인 사용자의 채팅 페이지 접근을 차단하고 메인 페이지로 리다이렉트하는 보안 기능을 구현했다.</p>
+                    <Code language={'javascript'}>
+                    {`
+// 실제 프론트엔드 로그인 확인 구현
+window.addEventListener('DOMContentLoaded', function() {
+    const userName = sessionStorage.getItem("userName");
+    if(!userName) {
+        alert("로그인 후 이용가능합니다.");
+        location.href = "/index";
+    }
     
-    # 개인정보 업데이트
-    personal_data, created = PersonalData.objects.get_or_create(
-        UserId_id=userId,
-        defaults={
-            'Allergy': allergy,
-            'Height': height,
-            'Weight': weight
+    // 추가 AJAX 확인
+    checkLogin();
+})
+
+function checkLogin() {
+    $.ajax({
+        url: "/common/checkLogin/",
+        method: "GET",
+        success: function(data) {
+            if(!data.result){
+                sessionStorage.removeItem('userName');
+                location.href = "/index";
+            }
         }
-    )
-    
-    if not created:
-        personal_data.Allergy = allergy
-        personal_data.Height = height
-        personal_data.Weight = weight
-        personal_data.save()
-    
-    return JsonResponse({
-        'result': 0,
-        'message': '개인정보가 업데이트되었습니다. 이제 더 정확한 건강 조언을 받을 수 있습니다.'
     })
+}
                     `}
                     </Code>
                 </Item>
             </Section>
-
             <Section title={'DATABASE'}>
                 <Item subTitle={'ERD'}>
                     <p>User, PersonalData, Calorie, MealPhotoAnalysis 테이블 관계도</p>
-                    {/* [IMAGE: ERD.png] */}
+                    <Mermaid chart={`
+erDiagram
+    User {
+        string UserId PK
+        string UserPassword
+        string UserName
+        string UserGender
+    }
+    
+    PersonalData {
+        string UserId FK,PK
+        string Allergy
+        string Height
+        string Weight
+    }
+    
+    Calorie {
+        string food_name PK
+        string calorie_per_serving_eg
+        int calorie_per_serving
+        float carbohydrate
+        float protein
+        float fat
+    }
+    
+    MealPhotoAnalysis {
+        int AnalysisId PK
+        string UserId FK
+        string PhotoPath
+        datetime CreatedAt
+    }
+    
+    User ||--|| PersonalData : "1:1 관계"
+    User ||--o{ MealPhotoAnalysis : "1:N 관계"
+                    `} />
                 </Item>
                 <Item subTitle={'User 테이블'}>
                     <p>사용자 기본 정보</p>
@@ -472,59 +569,64 @@ def updatePersonalData(request):
                     <p>• CreatedAt: 생성 시간</p>
                 </Item>
             </Section>
-
             <Section title={'TROUBLE SHOOTING'}>
                 <Item subTitle={'1. 커스텀 음식 모델 정확도 문제'}>
                     <p>
                         삼겹살과 같은 일부 한국 음식의 학습 정확도가 65%로 낮아 피자 등 다른 음식으로 오인식되는 문제가 발생했다.
                     </p>
                     <p>
-                        정확도 기반 필터링을 도입하여 80% 이상의 신뢰도를 가진 결과만 채택하도록 설정했다.
+                        COCO 모델과 커스텀 모델의 confidence 임계값을 다르게 설정(0.6 vs 0.9)하여 정확도를 높였다.
                     </p>
                     <Code language={'python'}>
                     {`
-# 정확도 기반 필터링으로 오판 방지
-for result in results_food:
-    for box in result.boxes:
-        confidence = float(box.conf)
-        if confidence > 0.8:  # 80% 이상일 때만 결과 채택
-            food_name = model_food.names[int(box.cls)]
-            detected_foods.append({
-                'name': food_name,
-                'confidence': confidence
-            })
-        else:
-            print(f"낮은 신뢰도로 제외: {food_name} ({confidence:.2f})")
+# 정확도 기반 필터링 구현
+results_coco = model_coco.predict(source=image_path, conf=0.6)  # COCO 모델
+results_food = model_food.predict(source=image_path, conf=0.9)  # 커스텀 모델
+
+# 음식 클래스 ID로 필터링
+food_class_ids = [46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 81, 82, 83, 1, 2, 3]
+for cls in boxes_coco.cls:
+    if int(cls) in food_class_ids:
+        labels_combined.append(model_coco.names[int(cls)])
+
+# 중복 제거로 오판 방지
+labels_combined = list(set(labels_combined))
                     `}
                     </Code>
                     <p>
                         추가로 이미지 영역을 정확히 재설정하고 선명한 이미지 위주로 재학습시켜 삼겹살의 정확도를 95% 이상으로 향상시켰다.
                     </p>
                 </Item>
-                <Item subTitle={'2. Gemini 2.5 Flash 기억력 한계'}>
+                <Item subTitle={'2. Gemini 2.0 Flash 기억력 한계'}>
                     <p>
-                        무료 버전인 Gemini 2.5 Flash는 3턴의 단기 기억만 제공하여 긴 대화에서 맥락을 잃는 문제가 있었다.
+                        Gemini 2.0 Flash는 단기 기억만 제공하여 긴 대화에서 맥락을 잃는 문제가 있었다.
                     </p>
                     <p>
-                        파일 기반 대화 기록 시스템을 구현하여 4-5턴의 중장기 기억을 제공하면서도 토큰 비용을 최적화했다.
+                        파일 기반 대화 기록 시스템을 구현하여 6턴의 중장기 기억을 제공하면서도 토큰 비용을 최적화했다.
                     </p>
                     <Code language={'python'}>
                     {`
-def manageChatMemory(request, message):
-    chatLogCount = request.session.get("chatLogCount", 1)
+# 채팅 기억 관리 구현
+def requestGemini(request, message, persona):
+    chatLogCount = request.session.get("chatLogCount")
     
-    # 대화 기록을 파일에 저장
-    chatLog = writeChatLog(request, message)
-    
-    # 4턴마다 초기화하여 토큰 관리
-    if chatLogCount >= 4:
-        # 기존 대화 요약 후 새 파일 생성
-        summarizeAndReset(request)
+    # 6회 이상이면 로그 초기화
+    if chatLogCount >= 6:
         request.session["chatLogCount"] = 1
+        createChatLog(request)
     else:
         request.session["chatLogCount"] = chatLogCount + 1
+
+    # 대화 기록을 파일에 저장하고 불러오기
+    chatLog = writeChatLog(request, message)
     
-    return chatLog
+    # 통합 프롬프트로 맥락 유지
+    full_prompt = f"""
+    캐릭터 정보: {chatBotData}
+    이전 대화 내용: {chatLog}
+    사용자 이름: {request.session.get("userName")}
+    현재 대화: {message}
+    """
                     `}
                     </Code>
                     <p>
@@ -540,60 +642,36 @@ def manageChatMemory(request, message):
                     </p>
                     <Code language={'python'}>
                     {`
+# 실제 이미지 중복 관리 구현
 def uploadImage(request):
     userId = request.session.get("userId")
     
     # 기존 이미지 확인 및 삭제
-    try:
-        existing_image = MealPhotoAnalysis.objects.get(UserId_id=userId)
-        # 파일 시스템에서 실제 이미지 파일 삭제
-        if os.path.exists(existing_image.PhotoPath.path):
-            os.remove(existing_image.PhotoPath.path)
-        # DB 레코드 삭제
-        existing_image.delete()
-    except MealPhotoAnalysis.DoesNotExist:
-        pass  # 기존 이미지가 없으면 그대로 진행
-    
+    imageData = foundImage(userId)
+    if imageData:
+        deletedResult = deleteImage(userId, imageData["imageId"], imageData["imagePath"])
+        if not deletedResult:
+            return JsonResponse({"result": 1, "errorMessage": "이미지 삭제 실패"})
+
     # 새 이미지 저장
-    new_image = MealPhotoAnalysis(
-        UserId_id=userId,
-        PhotoPath=uploaded_file,
+    user = User.objects.get(pk=userId)
+    mealPhoto = MealPhotoAnalysis(
+        UserId=user,
+        PhotoPath=image,
         CreatedAt=timezone.now()
     )
-    new_image.save()
-                    `}
-                    </Code>
-                </Item>
-                <Item subTitle={'4. 비로그인 사용자 접근 제어'}>
-                    <p>
-                        채팅 페이지에 비로그인 사용자가 직접 접근할 경우 오류가 발생하는 문제가 있었다.
-                    </p>
-                    <p>
-                        JavaScript와 Django 뷰 단에서 이중으로 로그인 상태를 확인하여 비로그인 사용자를 메인 페이지로 리다이렉트했다.
-                    </p>
-                    <Code language={'python'}>
-                    {`
-# Django 뷰에서 세션 확인
-def chat_view(request):
-    if not request.session.get('userId'):
-        return redirect('index')  # 비로그인 시 메인으로 리다이렉트
-    
-    return render(request, 'chat/chat.html', {
-        'user_name': request.session.get('userName')
-    })
-                    `}
-                    </Code>
-                    <Code language={'javascript'}>
-                    {`
-// 프론트엔드에서도 추가 확인
-document.addEventListener('DOMContentLoaded', function() {
-    // 헤더에 사용자명이 없으면 비로그인 상태
-    const userName = document.querySelector('.user-name');
-    if (!userName || !userName.textContent.trim()) {
-        alert('로그인이 필요합니다.');
-        window.location.href = '/';
-    }
-});
+    mealPhoto.save()
+
+def deleteImage(userId, imageId, imagePath):
+    try:
+        full_path = imagePath.path
+        if os.path.exists(full_path):
+            os.remove(full_path)  # 파일 시스템에서 삭제
+        
+        MealPhotoAnalysis.objects.filter(UserId=userId, AnalysisId=imageId).delete()
+        return True
+    except Exception as e:
+        return False
                     `}
                     </Code>
                 </Item>

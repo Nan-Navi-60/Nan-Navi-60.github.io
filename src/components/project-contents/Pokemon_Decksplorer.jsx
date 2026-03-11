@@ -12,7 +12,7 @@ export default async function ProjectDetail() {
             <Section title={'INDEX'}>
                 <Item subTitle={'포켓몬 카드 게임 덱 생성 및 공유 플랫폼'}>
                     <p>1. 포켓몬 카드 게임의 덱을 미리 생성해 볼 수 있는 웹 사이트</p>
-                    <p>2. 복잡한 카드 선택 로직을 통한 정확한 덱 구성 (동일 카드 2장 제한, 동명 카드 통합 관리)</p>
+                    <p>2. 카드 선택 로직을 통한 덱 구성 (동일 카드 2장 제한, 동명 카드 통합 관리)</p>
                     <p>3. 덱 공유 게시판을 통한 사용자 간 덱 전략 공유 및 소통</p>
                     <p>4. JavaScript 난독화와 JWT를 통한 클라이언트 사이드 코드 보안 강화</p>
                 </Item>
@@ -55,13 +55,13 @@ export default async function ProjectDetail() {
                 </Item>
                 <Item subTitle={'JavaScript + Bootstrap'}>
                     <p>
-                        복잡한 덱 생성 로직을 JavaScript로 구현하고, Bootstrap으로 반응형 UI를 제작했다.
+                        BootStrap을 통해 웹 페이지를 구현하였고, 서버 통신과 동적으로 움직이는 로직을 구현하였다.
                     </p>
                     <p>
-                        카드 선택, 중복 체크, 동명 카드 관리 등의 핵심 기능을 클라이언트 사이드에서 처리한다.
+                        규칙에 따라 덱을 제작해 볼 수 있는 로직을 구현하였다.
                     </p>
                 </Item>
-                <Item subTitle={'JWT + SessionStorage 하이브리드 인증'}>
+                <Item subTitle={'JWT + SessionStorage를 통한 사용자 인증'}>
                     <p>
                         서버 사이드에서는 JWT 토큰을 쿠키에 저장하여 API 인증을 처리하고, 클라이언트에서는 SessionStorage로 UI 상태를 관리한다.
                     </p>
@@ -316,7 +316,7 @@ erDiagram
             </Section>
 
             <Section title={'STRUCTURE'}>
-                <Item subTitle={'복잡한 덱 생성 로직 구현'}>
+                <Item subTitle={'덱 생성 로직 구현'}>
                     <Section title={''}>
                         <Item subTitle={'카드 선택 및 중복 체크 시스템'}>
                             <p>포켓몬 카드 게임 규칙에 따라 동일한 카드는 최대 2장까지만 선택 가능하도록 구현했다.</p>
@@ -662,7 +662,7 @@ erDiagram
                         카드 이미지 파일명과 DB 데이터 간의 불일치, 중복 데이터 삽입 등이 주요 원인이었다.
                     </p>
                     <p>
-                        이를 개선하기 위해 Excel을 통해 파일 ISERTE문에 들어갈 Qurey문을 자동화 하여 완성하였다.
+                        이를 개선하기 위해 Excel을 통해 파일 ISERTE문을 자동화 하여 완성하였다.
                     </p>
                 </Item>
                 <Item subTitle={'2. 동명 카드 통합 관리의 복잡성'}>
@@ -755,36 +755,6 @@ processResources {
                     <p>
                         CSS 미디어 쿼리와 Bootstrap의 반응형 클래스를 조합하여 주요 해상도에서 안정적으로 동작하도록 개선했다.
                     </p>
-                </Item>
-                <Item subTitle={'5. DB 저장 공간 비효율성'}>
-                    <p>
-                        게시판 DB에 카드 이미지가 순수 파일명으로 저장되어 불필요하게 저장공간을 사용하게 되었다.
-                    </p>
-                    <p>
-                        카드 정보를 문자열로 연결하여 저장하는 방식으로 인해 데이터 중복과 공간 낭비가 발생했다.
-                    </p>
-                    <p>
-                        카드 ID를 게시판 DB에 저장하고, 게시물 조회 시 ID를 통해 이미지를 가져오는 방식으로 개선 방향을 설정했다.
-                    </p>
-                    <Code language={'javascript'}>
-                    {`// 현재 방식: 카드 정보를 문자열로 저장
-selectedCardList.forEach(element => {
-    const no = element.no;
-    const alt = element.alt;
-    let temp = no + "_" + alt;
-
-    if(images === null){
-        images = temp;
-        return;
-    }
-
-    temp = "," + temp;
-    images += temp;
-});
-
-// 개선 방향: 카드 ID만 저장하여 공간 효율성 향상
-// "card_001,card_002,card_001" 형태로 저장`}
-                    </Code>
                 </Item>
             </Section>
         </div>
