@@ -54,7 +54,7 @@ export default async function ProjectLayout({ children, params }) {
                 <Link href={metaData.repoLink} className="btn-link" target="_blank">
                   GitHub
                 </Link>
-                <h4>{metaData.repoLink}</h4>
+                <p>{metaData.repoLink}</p>
               </div>
             )}
         </div>

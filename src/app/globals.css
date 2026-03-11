@@ -40,6 +40,21 @@ body {
     overflow-y: auto;   /* 세로 스크롤 허용 (기본값이지만 명시) */
 }
 
+/* 반응형: 모바일에서는 좌우 여백 최소화 */
+@media (max-width: 768px) {
+    body {
+        width: 100vw; /* 모바일에서는 전체 너비 사용 */
+        box-shadow: none; /* 그림자 제거 (여백이 없으므로) */
+    }
+}
+
+/* 반응형: 태블릿에서는 여백 조금 줄이기 */
+@media (min-width: 769px) and (max-width: 1024px) {
+    body {
+        width: 85vw; /* 태블릿에서는 85% 사용 */
+    }
+}
+
 a{
     text-decoration-line: none;
 }
@@ -59,7 +74,7 @@ a:visited, a:hover, a:active {
 }
 
 .header a{
-    font-size: 1vw;
+    font-size: clamp(16px, 1.2vw, 22px); /* 최소 16px로 증가, 최대 22px */
     color: white;
     text-align: center;
     display: block;
@@ -126,8 +141,24 @@ a:visited, a:hover, a:active {
     border-radius: 2vw;
 }
 
+/* 반응형: 모바일에서 스킬 영역 조정 */
+@media (max-width: 768px) {
+    .profile-area-skill {
+        padding: 3vw 4vw; /* 좌우 여백 증가 */
+        gap: 2vw 2vw; /* 상하좌우 gap 넓히기 */
+    }
+}
+
+/* 반응형: 태블릿에서 스킬 영역 조정 */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .profile-area-skill {
+        padding: 2vw 3vw; /* 좌우 여백 증가 */
+        gap: 1.5vw 1.5vw;
+    }
+}
+
 .font-icon{
-    font-size: 1vw;
+    font-size: clamp(10px, 1vw, 16px); /* 최소 10px로 조정, 최대 16px */
     font-weight: bolder;
 
     padding: 1vw 1vw 0.8vw 1vw;
@@ -149,12 +180,34 @@ a:visited, a:hover, a:active {
     transform: translate(-0.5vw, -0.2vw);
 }
 
+/* 반응형: 모바일에서 스킬 아이콘 (메인 + Detail 공통) */
+@media (max-width: 768px) {
+    .font-icon {
+        font-size: 10px; /* 고정 크기 */
+        border: 2.5px solid white; /* 테두리 두께 고정 */
+        padding: 8px 10px 6px 10px; /* 패딩 고정 */
+        margin: 4px 0; /* 마진 고정 */
+        min-width: 55px; /* 최소 너비 고정 */
+    }
+}
+
+/* 반응형: 태블릿에서 스킬 아이콘 (메인 + Detail 공통) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .font-icon {
+        font-size: 11px;
+        border: 2.5px solid white;
+        padding: 8px 10px 6px 10px;
+        min-width: 50px;
+    }
+}
+
 /* Project 영역 */
 .project-area {
     display: flex;           /* Grid 대신 Flex 사용 */
     flex-direction: column;  /* 위에서 아래로 쌓이게 설정 */
     gap: 5vw;                /* 프로젝트 간의 간격 */
     padding: 5vw 2vw;
+    border-radius: 2vw;
 }
 
 .project-area-list {
@@ -230,74 +283,6 @@ a:visited, a:hover, a:active {
     color: white !important;
 }
 
-/* ProjectDetail 영역 */
-/* 상세 페이지 스타일 */
-/* 레이아웃만을 취급함 */
-.detail-header {
-    width: 100%;
-    padding: 2vw 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1vw;
-}
-
-.detail-meta-info {
-    display: flex;
-    gap: 2vw;
-    color: #666;
-    font-size: 1.2vw;
-}
-
-.detail-links {
-    display: flex;
-    gap: 1vw;
-    margin-top: 1vw;
-}
-
-.detail-links div{
-    display: flex;
-    align-items: center;
-    gap: 1vw;
-}
-
-.btn-link {
-    padding: 0.5vw 1.5vw;
-    background-color: #28293e;
-    color: white;
-    border-radius: 0.5vw;
-    font-size: 1vw;
-    font-weight: bold;
-}
-
-.divider {
-    width: 100%;
-    border: 0;
-    border-top: 1px solid #ddd;
-    margin: 1vw 0;
-}
-
-.btn-back {
-    font-size: 2vw;
-    font-weight: bolder;
-    color: white;
-
-    padding: 1.4vw 2.5vw 1vw 2.5vw;
-    margin: 0.5vw auto;
-    text-align: center;
-
-    line-height: 0.7;
-    border-radius: 50vw;
-    width: fit-content;
-    height: auto;
-
-    box-shadow: 0.2vw 0.1vw 0.8vw 0.1vw rgba(255, 255, 255, 0.3);
-}
-
-.btn-back:hover{
-    box-shadow: 0.5vw 0.3vw 1vw 0.1vw rgba(17, 17, 32, 0.55);
-    transform: translate(-0.5vw, -0.2vw);
-}
-
 /* 색상 모음 */
 .orange{
     color: #ef6d58;
@@ -341,18 +326,18 @@ a:visited, a:hover, a:active {
 
 /* 폰트사이즈 모음 */
 .font-big{
-    font-size: 8vw;
+    font-size: clamp(32px, 8vw, 96px); /* 최소 32px, 최대 96px */
     font-weight: bolder;
     line-height: 90%;
 }
 
 .font-mid{
-    font-size: 3vw;
+    font-size: clamp(20px, 3vw, 48px); /* 최소 20px, 최대 48px */
     font-weight: bold;
     line-height: 100%;
 }
 
 .font-sml{
-    font-size: 1.3vw;
+    font-size: clamp(14px, 1.3vw, 20px); /* 최소 14px, 최대 20px */
     font-weight: lighter;
 }

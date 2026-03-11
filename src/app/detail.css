@@ -1,5 +1,124 @@
 @import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
 
+/* ========================================
+   Detail 페이지 전용 스타일
+   (projects/[id]/layout.js 및 page.js에서 사용)
+======================================== */
+
+/* Detail 페이지 레이아웃 */
+.detail-header {
+    width: 100%;
+    padding: 2vw 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+}
+
+.detail-meta-info {
+    display: flex;
+    gap: 2vw;
+    color: #666;
+    font-size: clamp(12px, 1.2vw, 18px);
+}
+
+/* 반응형: 모바일에서 메타 정보 레이아웃 조정 */
+@media (max-width: 768px) {
+    .detail-meta-info {
+        flex-direction: column;
+        gap: 0.5vw;
+    }
+}
+
+.detail-links {
+    display: flex;
+    gap: 1vw;
+    margin-top: 1vw;
+}
+
+.detail-links div{
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+}
+
+.detail-links p{
+    font-size: clamp(14px, 1.3vw, 20px);
+}
+
+.btn-link {
+    padding: 0.5vw 1.5vw;
+    background-color: #28293e;
+    color: white;
+    border-radius: 0.5vw;
+    font-size: clamp(12px, 1vw, 16px);
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+
+.btn-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 반응형: 모바일에서 버튼 크기 조정 */
+@media (max-width: 768px) {
+    .btn-link {
+        padding: 8px 16px;
+        font-size: 12px;
+        border-radius: 6px;
+    }
+
+    .detail-links p{
+        font-size: 14px;
+    }
+}
+
+/* 반응형: 태블릿에서 버튼 크기 조정 */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .btn-link {
+        padding: 6px 14px;
+        font-size: 13px;
+        border-radius: 5px;
+    }
+
+    .detail-links p{
+        font-size: 15px;
+    }
+}
+
+.divider {
+    width: 100%;
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 1vw 0;
+}
+
+.btn-back {
+    font-size: clamp(18px, 2vw, 28px);
+    font-weight: bolder;
+    color: white;
+
+    padding: 1.4vw 2.5vw 1vw 2.5vw;
+    margin: 0.5vw auto;
+    text-align: center;
+
+    line-height: 0.7;
+    border-radius: 50vw;
+    width: fit-content;
+    height: auto;
+
+    box-shadow: 0.2vw 0.1vw 0.8vw 0.1vw rgba(255, 255, 255, 0.3);
+}
+
+.btn-back:hover{
+    box-shadow: 0.5vw 0.3vw 1vw 0.1vw rgba(17, 17, 32, 0.55);
+    transform: translate(-0.5vw, -0.2vw);
+}
+
+/* ========================================
+   Detail 페이지 콘텐츠 스타일
+======================================== */
+
 .project-detail-container {
     margin: 0 auto;
     max-width: 80%;
@@ -10,7 +129,7 @@
 
 /* 메인 타이틀 */
 .detail-title {
-    font-size: 3vw;
+    font-size: clamp(24px, 3vw, 42px); /* 최소 24px, 최대 42px */
     font-weight: 800;
     color: #28293e; /* 진한 네이비 텍스트 */
     margin-bottom: 4vw;
@@ -47,7 +166,7 @@
 }
 
 .detail-sub-title h2 {
-    font-size: 1.8vw;
+    font-size: clamp(18px, 1.8vw, 28px); /* 최소 18px, 최대 28px */
     font-weight: 700;
     color: #ef6d58; /* 주황색 포인트 */
     margin: 0;
@@ -66,7 +185,7 @@
 }
 
 .detail-item h3 {
-    font-size: 1.3vw;
+    font-size: clamp(14px, 1.3vw, 20px); /* 최소 14px, 최대 20px */
     font-weight: 700;
     color: #28293e; /* 네이비 텍스트 */
     margin-bottom: 0.8vw;
@@ -86,7 +205,7 @@
 }
 
 .detail-item p {
-    font-size: 1.1vw;
+    font-size: clamp(12px, 1.1vw, 16px); /* 최소 12px, 최대 16px */
     line-height: 1.5; /* 가독성을 위해 줄 간격 넉넉히 */
     color: #555;
     margin-bottom: 0.5vw;
@@ -105,4 +224,28 @@
     /* 이미지 테두리도 연한 네이비로 통일 */
     border: 1px solid rgba(40, 41, 62, 0.1); 
     background-color: #f9f9f9;
+}
+
+/* Code 블록 스타일 (react-syntax-highlighter) */
+.detail-item pre {
+    font-size: clamp(10px, 0.9vw, 14px) !important; /* 최소 10px, 최대 14px */
+    line-height: 1.5 !important;
+    overflow-x: auto; /* 가로 스크롤 허용 */
+}
+
+.detail-item pre code {
+    font-size: clamp(10px, 0.9vw, 14px) !important; /* 최소 10px, 최대 14px */
+    white-space: pre; /* 코드 줄바꿈 유지 */
+}
+
+/* 반응형: 모바일에서 코드 블록 조정 */
+@media (max-width: 768px) {
+    .detail-item pre {
+        font-size: 11px !important; /* 모바일에서 고정 크기 */
+        padding: 12px !important;
+    }
+    
+    .detail-item pre code {
+        font-size: 11px !important;
+    }
 }

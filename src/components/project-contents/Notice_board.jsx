@@ -141,7 +141,7 @@ public profileDAO() {
 
             <Section title={'STRUCTURE'}>
                 <Item subTitle={'Client Request'}>
-                    <p>로그인 페이지의 코드로 form의 'action'과 method 속성을 통해 요청 형식을 지정한다.</p>
+                    <p>로그인 페이지의 코드로 form의 'action'과 'method' 속성을 통해 요청 형식을 지정한다.</p>
                     <p>input의 name을 통해 요청 파라미터의 key를 지정하며, 'type="submit"'을 사용하여 요청을 전송한다. </p>
                     <Code language={'html'}>
                         {`
@@ -312,7 +312,40 @@ for (int i = 1; i <= total_pageNumber; i++){%>
                     </Section>
                 </Item>
                 <Item subTitle={'Duplicate Images'}>
-                    <p />
+                    <Section title={''}>
+                        <Item subTitle={'Servlet'}>
+                            'delete_img' 함수를 통해 게시판 수정 시 기존의 이미지를 우선적으로 삭제한다.
+                            'db_img'의 기본 값은 '1'로 db의 'content' 테이블의 'id'가 1이 아니라면 이미지를 삭제한다.
+                            기존의 이미지가 유지되기를 바라는 사용자의 경우 다시 한 번 동일한 이미지를 업로드해줘야한다.
+                            <Code language={'JAVA'}>{`delete_img(id);`}</Code>
+                            <Code language={'JAVA'}>
+                                {`
+private void delete_img(int id) {
+    String db_img = "0";
+    String SQL = "SELECT contents_img FROM contents WHERE id = ?";
+    try{
+        conn = dao.getconnection();
+        pstmt = conn.prepareStatement(SQL);
+        pstmt.setInt(1, id);
+        rs = pstmt.executeQuery();
+
+        if(rs.next()) {
+            db_img = rs.getString("contents_img");
+        }
+    } catch (SQLException e) {e.printStackTrace();}
+    
+    if (! db_img.equals("1")) {
+        String filePath = getServletContext().getRealPath("/upload/");
+        filePath += db_img;
+        System.out.println("filePath :"+ filePath);
+        File f = new File(filePath);
+        f.delete();
+    }
+}
+                                `}
+                            </Code>
+                        </Item>
+                    </Section>
                 </Item>
             </Section>
 
@@ -329,11 +362,16 @@ for (int i = 1; i <= total_pageNumber; i++){%>
                         댓글을 등록한 후 해당 페이지를 새로고침할 경우 댓글이 중복으로 작성되는 현상이 발견됨.
                     </p>
                     <p>
-                        POST로 요청을 보대는 댓글의 경우 GET요청과 달리 페이지를 리로드 하지 않고 해당 페이지의 상태를 유지하게 된다.
+                        POST 방식으로 댓글 등록 요청을 처리한 후 Sevlet는 forwoard를 이용해 동일한 페이지를 응답한다.
                     </p>
                     <p>
-                        이때 HTML의 "form" Element는 해당 요청의 요청객체를 가지고 있어 새로 고침을 시도하면 해당 요청을 다시 전송하는 작업을 수행하게 된다.
+                        이러한 방식은 실제로 페이지를 새로 로드하는 것 보다는 페이지의 렌더링만 변경하는 것과 유사하며, 아직 POST요청 객체를 가지고있던 페이지는 새로고침 시 동일한 요청을 재전송하는 문제가 발생하였다.
+                    </p>
+                    <p>
                         이를 해결하기 위해 JSP파일 자체에서 요청객체를 생성하지 않고 AJAX를 통해 댓글과 관련된 요청을 처리하였다.
+                    </p>
+                    <p>
+                        이러한 처리를 할경우 Servlet과 Client는 Js를 통해서만 요청을 주고 받게 되기 때문에 새로고침으로 인한 재요청 문제를 해결할 수 있다. 
                     </p>
                 </Item>
                 <Item subTitle={'2. Login Session Check'}>
