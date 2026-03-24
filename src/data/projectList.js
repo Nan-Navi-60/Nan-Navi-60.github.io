@@ -43,4 +43,15 @@ export const projectList = [
     repoLink: "https://github.com/spjniu/HealthcareProject",
     demoLink: "",
   },
+  {
+    id: 5,
+    title: "Card History 3-Tier System",
+    titleImg: "/img/projectImg/title/Card_History_3Tier_System.png",
+    desc: "Docker 기반 3-tier 아키텍처 카드 거래내역 시스템",
+    period: "2026.02 - 2026.03",
+    team: "4인 (Application 계층 담당)",
+    stack: ["Docker", "Nginx", "Java Servlet", "Redis", "MySQL Cluster", "HikariCP"],
+    repoLink: "https://github.com/yeonju73/card-history-3tier-system",
+    demoLink: "",
+  },
 ];

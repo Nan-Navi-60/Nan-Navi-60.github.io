@@ -2,13 +2,15 @@ import NoticeBoard from './Notice_board';
 import Jicbak from './Jicbak';
 import PokemonDecksplorer from './Pokemon_Decksplorer'
 import HealthCare from './Health_Care';
+import CardHistory3TierSystem from './card-history-3tier-system';
 
 // ID와 컴포넌트를 매핑합니다.
 const contents = {
   1: NoticeBoard,
   2: Jicbak,
   3: PokemonDecksplorer,
-  4: HealthCare
+  4: HealthCare,
+  5: CardHistory3TierSystem
 };
 
 export default function ProjectContent({ id }) {
