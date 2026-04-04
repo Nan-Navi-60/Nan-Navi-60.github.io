@@ -1,5 +1,7 @@
 import './globals.css';
+import '../components/chat/chat.css';
 import Header from '../components/Header';
+import ChatButton from '../components/chat/ChatButton';
 
 export const metadata = {
   title: 'Nan-Navi-60 Portfolio',
@@ -15,6 +17,9 @@ export default function RootLayout({ children }) {
         
         {/* children 위치에 각 페이지(page.js)의 내용이 들어갑니다 */}
         {children}
+
+        {/* 포트폴리오 챗봇 플로팅 버튼 */}
+        <ChatButton />
       </body>
     </html>
   );
