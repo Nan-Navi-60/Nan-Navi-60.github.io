@@ -68,3 +68,24 @@ package-lock.json.lock
 
 # 무시해도 괜찮은 파일 리스트
 temp/
+
+# 로그 데이터
+*.log
+
+# 대화 관련 기록 및 수정 기록 (docs 폴더 내 원본/대화 내역)
+docs/conversation*.md
+docs/work_progress*.md
+
+# 기타 참고용 원본 문서 리스트가 커밋되지 않길 원하신다면 아래 부분 주석을 해제하세요
+# docs/*_detail.md
+# docs/project_content_writing_manual.md
+
+# 백업 및 임시 데이터
+*.bak
+*.backup
+*.tmp
+*.temp
+*~
+
+# eslint cache
+.eslintcache
