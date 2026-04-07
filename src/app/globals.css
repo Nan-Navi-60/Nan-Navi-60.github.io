@@ -141,6 +141,14 @@ a:visited, a:hover, a:active {
     border-radius: 2vw;
 }
 
+.call-area{
+    display: flex;
+    align-self: start;
+    gap: 3vw;
+    padding: 1.5vw;
+    border-radius: 1.3vw;
+}
+
 /* 반응형: 모바일에서 스킬 영역 조정 */
 @media (max-width: 768px) {
     .profile-area-skill {
