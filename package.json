@@ -11,6 +11,8 @@
   "dependencies": {
     "mermaid": "^11.12.3",
     "next": "16.1.6",
+    "pdf-parse": "^2.4.5",
+    "pdf2json": "^4.0.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-markdown": "^10.1.0",
