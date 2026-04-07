@@ -1,4 +1,4 @@
 export const skills = [
-    "PhotoShop", "Illustrator", "AdobeXD", "SpringBoot", 
-    "MySQL", "JAVA", "HTML", "CSS", "JavaScript", "BootStrap"
-  ];
+  "PhotoShop", "Illustrator", "AdobeXD", "SpringBoot",
+  "MySQL", "JAVA", "HTML", "CSS", "JavaScript", "BootStrap", "React", "Next.js"
+];
