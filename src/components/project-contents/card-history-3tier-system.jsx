@@ -1,3 +1,4 @@
+import ProjectSummary from './ProjectSummary';
 import { Section } from '../ui/Section';
 import { Item } from '../ui/Item';
 import ProjectImage from '../ui/ProjectImage';
@@ -8,6 +9,7 @@ export default async function ProjectDetail() {
     return (
         <div className="project-detail-container">
             <h1 className="detail-title">3-Tier 아키텍처 카드 거래내역 시스템</h1>
+            <ProjectSummary projectName="Card History 3 Tier System" />
 
             <Section title={'INDEX'}>
                 <Item subTitle={'Docker 컨테이너 기반 3-tier 아키텍처 구현'}>

@@ -1,3 +1,4 @@
+import ProjectSummary from './ProjectSummary';
 import { Section } from '../ui/Section';
 import { Item } from  '../ui/Item';
 import ProjectImage from '../ui/ProjectImage';
@@ -8,6 +9,7 @@ export default async function ProjectDetail() {
     return (
         <div className="project-detail-container">
             <h1 className="detail-title">Spring Boot 게시판 시스템</h1>
+            <ProjectSummary projectName="Jicbak" />
 
             <Section title={'INDEX'}>
                 <Item subTitle={'Spring Boot 프레임워크 학습'}>

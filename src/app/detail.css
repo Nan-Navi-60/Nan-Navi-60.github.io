@@ -249,3 +249,14 @@
         font-size: 11px !important;
     }
 }
+
+/* AI 프로젝트 요약 컴포넌트 */
+.ai-summary-container { margin-top: 3vh; margin-bottom: 2vh; padding: 24px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 12px; border: 1px solid #334155; box-shadow: 0 4px 15px rgba(0,0,0,0.2); color: #e2e8f0; }
+.ai-summary-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 1.2rem; font-weight: bold; color: #38bdf8; border-bottom: 1px solid #334155; padding-bottom: 8px; }
+.ai-summary-icon { font-size: 1.3rem; }
+.ai-summary-content { line-height: 1.6; font-size: 1rem; color: #cbd5e1; }
+.ai-loading { display: flex; align-items: center; gap: 12px; color: #94a3b8; }
+.inline-typing { padding: 0; justify-content: flex-start; }
+.inline-typing span { background-color: #38bdf8; width: 6px; height: 6px; }
+.ai-summary-content p { margin: 0 0 10px 0; }
+.ai-summary-content p:last-child { margin-bottom: 0; }

@@ -1,3 +1,4 @@
+import ProjectSummary from './ProjectSummary';
 import { Section } from '../ui/Section';
 import { Item } from  '../ui/Item';
 import ProjectImage from '../ui/ProjectImage';
@@ -8,6 +9,7 @@ export default async function ProjectDetail() {
     return (
         <div className="project-detail-container">
             <h1 className="detail-title">포켓몬 카드 덱 생성 사이트</h1>
+            <ProjectSummary projectName="Pokemon Decksplorer" />
 
             <Section title={'INDEX'}>
                 <Item subTitle={'포켓몬 카드 게임 덱 생성 및 공유 플랫폼'}>

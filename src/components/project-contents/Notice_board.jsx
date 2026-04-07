@@ -1,3 +1,4 @@
+import ProjectSummary from './ProjectSummary';
 import { Section } from '../ui/Section';
 import { Item } from  '../ui/Item';
 import ProjectImage from '../ui/ProjectImage';
@@ -11,6 +12,7 @@ export default async function ProjectDetail() {
     return (
         <div className="project-detail-container">
             <h1 className="detail-title">Servlet 게시판 사이트</h1>
+            <ProjectSummary projectName="Notice Board" />
 
             <Section title={'INDEX'}>
                 <Item subTitle={'사이트의 기본 작동 원리와 구조의 이해'}>

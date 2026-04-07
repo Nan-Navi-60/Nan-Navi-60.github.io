@@ -1,3 +1,4 @@
+import ProjectSummary from './ProjectSummary';
 import { Section } from '../ui/Section';
 import { Item } from  '../ui/Item';
 import ProjectImage from '../ui/ProjectImage';
@@ -8,6 +9,7 @@ export default async function ProjectDetail() {
     return (
         <div className="project-detail-container">
             <h1 className="detail-title">AI 기반 식단 분석 시스템</h1>
+            <ProjectSummary projectName="Healthcare" />
 
             <Section title={'INDEX'}>
                 <Item subTitle={'AI 캐릭터 기반 개인 맞춤형 건강 관리 시스템'}>

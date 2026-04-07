@@ -1,3 +1,4 @@
+import ProjectSummary from './ProjectSummary';
 import { Section } from '../ui/Section';
 import { Item } from '../ui/Item';
 import ProjectImage from '../ui/ProjectImage';
@@ -7,6 +8,7 @@ export default async function SessionSharingPerformance() {
     return (
         <div className="project-detail-container">
             <h1 className="detail-title">Session Sharing Performance (세션 저장소 응답 성능 교차 검증)</h1>
+            <ProjectSummary projectName="Session Sharing Performance" />
 
             <Section title={'INDEX'}>
                 <Item subTitle={'테스트 목적 및 가설'}>
