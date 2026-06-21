@@ -31,8 +31,6 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-        env:
-          NEXT_PUBLIC_RAG_API_URL: ${{ secrets.NEXT_PUBLIC_RAG_API_URL }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

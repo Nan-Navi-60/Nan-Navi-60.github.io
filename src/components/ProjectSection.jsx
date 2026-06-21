@@ -5,7 +5,7 @@ export default function ProjectSection() {
 
   return (
     <div className="project-area bg-navy white font-sml">
-      {projectList.reverse().map((project) => (
+      {projectList.toReversed().map((project) => (
         <Link key={project.id} href={`/projects/${project.id}`}>
           <div key={project.id} className="project-area-list">
             
